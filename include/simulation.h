@@ -17,8 +17,9 @@ class Simulation {
         int *frame_buffer;
         /* Camera to shoot rays from */
         Camera cam;
-        /* Return color when a ray is cast from orig in the direction dir */
-        Vector3d castRay(Vector3f orig, Vector3f dir);
+
+        void raymarch_worker_thread(int idx, int work);
+
         /* shapes in the scene */
         std::vector<std::shared_ptr<Shape>> scene_shapes;
 

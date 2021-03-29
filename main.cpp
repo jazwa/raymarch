@@ -34,8 +34,7 @@ int main(void) {
         std::string filename = "assets/img" + std::to_string(step) + ".ppm";
         ofstream ofs(filename, ios_base::out | ios_base::binary);
         ofs << "P6" << endl << sim.width << ' ' << sim.height << endl << "255" << endl;
-        
-        /* TODO parallelize this */
+
         for (int j = 0; j < sim.height; j++) {
             for (int i = 0; i < sim.width; i++) {
                 int idx = 3*(j*sim.width + i);

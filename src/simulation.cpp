@@ -2,6 +2,7 @@
 #include "simulation.h"
 #include <iostream>
 #include <limits>
+#include <thread>
 
 std::shared_ptr<Shape> Simulation::nearest_shape(Vector3f p) {
 
@@ -15,7 +16,6 @@ std::shared_ptr<Shape> Simulation::nearest_shape(Vector3f p) {
             min_distance = d;
         }
     }
-
     return ret;
 }
 
@@ -49,20 +49,41 @@ Vector3d Simulation::raymarch(Vector3f dir) {
     return background_color;
 }
 
-void Simulation::render_step() {
 
-    #pragma omp parallel for schedule(dynamic, 64)
-    for (int idx = 0; idx < height*width; idx++) {
-            
+void Simulation::raymarch_worker_thread(int i, int work) {
+
+    for (int idx = i; idx < i+work && idx < height*width; idx++) {
         int yidx = idx / width;
         int xidx = idx % width;
 
-        Vector3d pixel_color = raymarch(cam.pixel_ray(xidx, yidx));
+        Vector3f dir = cam.pixel_ray(xidx, yidx);
+        Vector3d pixel_color = raymarch(dir);
 
         /* write to the frame buffer */
         int fb_idx = 3*(yidx*width + xidx);
         frame_buffer[fb_idx] = pixel_color[0];
         frame_buffer[fb_idx+1] = pixel_color[1];
         frame_buffer[fb_idx+2] = pixel_color[2];
+    }
+}
+
+void Simulation::render_step() {
+
+    int num_threads = 16;
+
+    int work_per_thread = ceil((height*width) / (double)num_threads);
+    // nearest upper multiple of cache line size
+    work_per_thread = ((work_per_thread-1)/64) * 64 + 64;
+    
+    std::vector<std::thread> workers;
+
+    /* I really don't know what I'm doing here */
+    for (int t = 0; t < num_threads; t++) {
+        workers.push_back(std::thread(&Simulation::raymarch_worker_thread, this, t*work_per_thread, work_per_thread));
+    }
+
+    for (auto& t : workers) {
+        if (t.joinable())
+            t.join();
     }
 }

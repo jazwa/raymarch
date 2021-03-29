@@ -87,7 +87,3 @@ class Capsule: public Shape {
             return this->color;
         }
 };
-
-/* class Box: public Shape {
-    private 
-} */
