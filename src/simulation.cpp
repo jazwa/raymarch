@@ -72,7 +72,7 @@ void Simulation::render_step() {
     int num_threads = 16;
 
     int work_per_thread = ceil((height*width) / (double)num_threads);
-    // nearest upper multiple of cache line size
+    /* Nearest upper multiple of cache line size */
     work_per_thread = ((work_per_thread-1)/64) * 64 + 64;
     
     std::vector<std::thread> workers;
