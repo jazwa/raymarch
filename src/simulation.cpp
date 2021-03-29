@@ -20,7 +20,7 @@ std::shared_ptr<Shape> Simulation::nearest_shape(Vector3f p) {
 }
 
 Vector3d Simulation::raymarch(Vector3f dir) {
-    int max_steps = 100;
+    int max_steps = 128;
     Vector3f curr = cam.origin();
 
     for (int step = 0; step < max_steps; step++) {
@@ -51,16 +51,18 @@ Vector3d Simulation::raymarch(Vector3f dir) {
 
 void Simulation::render_step() {
 
-    for (int yidx = 0; yidx < height; yidx++) {
-        for (int xidx = 0; xidx < width; xidx++) {
+    #pragma omp parallel for schedule(dynamic, 64)
+    for (int idx = 0; idx < height*width; idx++) {
+            
+        int yidx = idx / width;
+        int xidx = idx % width;
 
-            Vector3d pixel_color = raymarch(cam.pixel_ray(xidx, yidx));
+        Vector3d pixel_color = raymarch(cam.pixel_ray(xidx, yidx));
 
-            /* write to the frame buffer */
-            int fb_idx = 3*(yidx*width + xidx);
-            frame_buffer[fb_idx] = pixel_color[0];
-            frame_buffer[fb_idx+1] = pixel_color[1];
-            frame_buffer[fb_idx+2] = pixel_color[2];
-        }
+        /* write to the frame buffer */
+        int fb_idx = 3*(yidx*width + xidx);
+        frame_buffer[fb_idx] = pixel_color[0];
+        frame_buffer[fb_idx+1] = pixel_color[1];
+        frame_buffer[fb_idx+2] = pixel_color[2];
     }
 }

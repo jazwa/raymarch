@@ -11,12 +11,15 @@ A simple project using raymarching and signed distance functions to render 3d sc
     make
 ```
 
-Sample render:
+Sample renders:
 
-![Render](assets/first.png?raw=true)
+![first](assets/first.png?raw=true)
+
+![dhelix](assets/dhelix.png)
 
 ## Todo
     * Support arbitrary transformations for objects (cameras, shapes)
-    * Multithreading
+    * Multithreading, most likely OpenMP
     * Implement GIF animations by stringing together images
+    * Support lighting and shadows
 

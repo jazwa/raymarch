@@ -1,5 +1,6 @@
 
 #include <Eigen/Dense>
+#include <algorithm>
 
 using namespace Eigen;
 
@@ -59,3 +60,34 @@ class Plane: public Shape {
             return color;
         }
 };
+
+class Capsule: public Shape {
+    private:
+        Vector3f a;
+        Vector3f b;
+        float radius;
+        Vector3d color;
+
+    public:
+        Capsule(Vector3f a, Vector3f b, float radius, Vector3d color) {
+            this->a = a;
+            this->b = b;
+            this->radius = radius;
+            this->color = color;
+        }
+
+        float sdf(Vector3f p) {
+            float t = (p-a).dot(b-a) / (b-a).dot(b-a);
+            t = std::clamp<float>(t, 0.0, 1.0);
+            Vector3f c = a + t*(b-a);
+            return (p-c).norm() - radius;
+        }
+
+        Vector3d get_color() {
+            return this->color;
+        }
+};
+
+/* class Box: public Shape {
+    private 
+} */
