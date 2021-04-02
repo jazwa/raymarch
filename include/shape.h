@@ -1,14 +1,22 @@
 
 #include <Eigen/Dense>
 #include <algorithm>
+#include <texture.h>
 
 using namespace Eigen;
 
 class Shape {
+    protected:
+        Texture texture;
     public:
         virtual float sdf(Vector3f p) = 0;
-        virtual Vector3d get_color() = 0;
+
         virtual ~Shape() {}
+        
+        Texture get_texture() {
+            return texture;
+        };
+
         //virtual void transform(Matrix4f t);
 };
 
@@ -16,21 +24,16 @@ class Sphere: public Shape {
     private:
         Vector3f center;
         float radius;
-        Vector3d color;
     public:
-        Sphere(Vector3f center, float radius, Vector3d color) {
+        Sphere(Vector3f center, float radius, Texture texture) {
             this->center = center;
             this->radius = radius;
-            this->color = color;
+            this->texture = texture;
         }
 
         /* TODO change to support worldspace to reference space */
         float sdf(Vector3f p) {
             return (p - center).norm() - radius;
-        }
-
-        Vector3d get_color() {
-            return color;
         }
 
         Vector3f get_center() {
@@ -42,13 +45,12 @@ class Plane: public Shape {
     private:
         Vector3f point;
         Vector3f normal;
-        Vector3d color;
-        
+
     public:
-        Plane(Vector3f point, Vector3f normal, Vector3d color) {
+        Plane(Vector3f point, Vector3f normal, Texture texture) {
             this->point = point;
             this->normal = normal.normalized();
-            this->color = color;
+            this->texture = texture;
         }
 
         /* TODO change to support worldspace to reference space */
@@ -56,9 +58,6 @@ class Plane: public Shape {
             return normal.dot(p - this->point);
         }
 
-        Vector3d get_color() {
-            return color;
-        }
 };
 
 class Capsule: public Shape {
@@ -66,14 +65,13 @@ class Capsule: public Shape {
         Vector3f a;
         Vector3f b;
         float radius;
-        Vector3d color;
 
     public:
-        Capsule(Vector3f a, Vector3f b, float radius, Vector3d color) {
+        Capsule(Vector3f a, Vector3f b, float radius, Texture texture) {
             this->a = a;
             this->b = b;
             this->radius = radius;
-            this->color = color;
+            this->texture = texture;
         }
 
         float sdf(Vector3f p) {
@@ -83,7 +81,4 @@ class Capsule: public Shape {
             return (p-c).norm() - radius;
         }
 
-        Vector3d get_color() {
-            return this->color;
-        }
 };

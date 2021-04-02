@@ -31,7 +31,7 @@ int main(void) {
         /* write to ppm file */
         int* frame_buffer = sim.get_current_frame();
 
-        std::string filename = "assets/img" + std::to_string(step) + ".ppm";
+        std::string filename = "img" + std::to_string(step) + ".ppm";
         ofstream ofs(filename, ios_base::out | ios_base::binary);
         ofs << "P6" << endl << sim.width << ' ' << sim.height << endl << "255" << endl;
 

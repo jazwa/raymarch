@@ -4,7 +4,7 @@
 #include <limits>
 #include <thread>
 
-std::shared_ptr<Shape> Simulation::nearest_shape(Vector3f p) {
+std::shared_ptr<Shape> Simulation::nearest_shape(Vector3f& p) {
 
     std::shared_ptr<Shape> ret = nullptr;
     float min_distance = std::numeric_limits<float>::infinity();
@@ -19,7 +19,7 @@ std::shared_ptr<Shape> Simulation::nearest_shape(Vector3f p) {
     return ret;
 }
 
-Vector3d Simulation::raymarch(Vector3f dir) {
+Vector3i Simulation::raymarch(Vector3f& dir) {
     int max_steps = 128;
     Vector3f curr = cam.origin();
 
@@ -29,24 +29,24 @@ Vector3d Simulation::raymarch(Vector3f dir) {
             abs(curr[1]) >= sim_bounds || 
             abs(curr[2]) >= sim_bounds) 
         {
-            return background_color;
+            return background.get_pixel_color();
         }
 
         auto nearest = nearest_shape(curr);
 
         if (nearest == nullptr) {
             /* TODO handle this */
-            return background_color;
+            return background.get_pixel_color();
         }
         float nearest_dist = nearest->sdf(curr);
         if (nearest_dist < eps) {
-            return nearest->get_color();
+            return nearest->get_texture().get_pixel_color();
         }
 
         /* move the ray forward by the length of the nearest shape */
         curr = curr + nearest_dist*dir;
     }
-    return background_color;
+    return background.get_pixel_color();
 }
 
 
@@ -57,7 +57,7 @@ void Simulation::raymarch_worker_thread(int i, int work) {
         int xidx = idx % width;
 
         Vector3f dir = cam.pixel_ray(xidx, yidx);
-        Vector3d pixel_color = raymarch(dir);
+        Vector3i pixel_color = raymarch(dir);
 
         /* write to the frame buffer */
         int fb_idx = 3*(yidx*width + xidx);

@@ -2,11 +2,12 @@
 
 #include <stdint.h>
 #include <cstdlib>
-#include <shape.h>
-#include <camera.h>
 #include <Eigen/Dense>
 #include <vector>
 #include <map>
+#include <texture.h>
+#include <shape.h>
+#include <camera.h>
 
 using namespace Eigen;
 
@@ -25,12 +26,12 @@ class Simulation {
 
         const float eps = 0.005;
         const float sim_bounds = 6.0;
-        const Vector3d background_color = Vector3d(222,222,222);
+        Texture background = Texture(222,222,222);
 
     public:
         /* Options for the simulation output */
-        const int width = 1280;
-        const int height = 720;
+        const int width = 480;
+        const int height = 360;
         const float fov = 90.0;
         const int num_frames = 1;
 
@@ -54,15 +55,15 @@ class Simulation {
                 {'c', 'g'},
                 {'g', 'c'}
             };
-            std::map<char, Vector3d> base_color = {
-                {'a', Vector3d(0, 127, 255)}, // adenine -> azure
-                {'t', Vector3d(253, 245, 1)}, // thymine -> tweety bird
-                {'c', Vector3d(20, 253, 20)}, // guanine -> green
-                {'g', Vector3d(150, 10, 24)}  // cytosine -> carmine
+            std::map<char, Texture> base_color = {
+                {'a', Texture(0, 127, 255)}, // adenine -> azure
+                {'t', Texture(253, 245, 1)}, // thymine -> tweety bird
+                {'c', Texture(20, 253, 20)}, // guanine -> green
+                {'g', Texture(150, 10, 24)}  // cytosine -> carmine
             };
 
             /* this might not be the right name */
-            Vector3d pentose_color = Vector3d(170, 120, 230);
+            Texture pentose_color = Texture(170, 120, 230);
 
             /* simplified double helix */ 
             for (int y_idx = 0; y_idx <= 50; y_idx++) { 
@@ -98,9 +99,9 @@ class Simulation {
         /* determine the color of every pixel, write to the frame_buffer */
         void render_step();
 
-        std::shared_ptr<Shape> nearest_shape(Vector3f p);
+        std::shared_ptr<Shape> nearest_shape(Vector3f& p);
 
-        Vector3d raymarch(Vector3f dir);
+        Vector3i raymarch(Vector3f& dir);
 
         /* return a pointer to the frame_buffer, not the safest */
         int* get_current_frame() {
