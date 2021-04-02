@@ -23,4 +23,5 @@ Sample renders:
     * Support lighting and shadows
     * Add CSG primitives
     * Implement triangle inequality optimization
+    * Octree binning
 
