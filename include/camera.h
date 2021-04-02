@@ -1,3 +1,5 @@
+#ifndef CAMERA_H
+#define CAMERA_H
 
 #include <stdint.h>
 #include <Eigen/Dense>
@@ -43,3 +45,5 @@ class Camera {
         }
 
 };
+
+#endif

@@ -1,4 +1,5 @@
-
+#ifndef SHAPE_H
+#define SHAPE_H
 #include <Eigen/Dense>
 #include <algorithm>
 #include <texture.h>
@@ -82,3 +83,5 @@ class Capsule: public Shape {
         }
 
 };
+
+#endif

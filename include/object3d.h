@@ -1,3 +1,5 @@
+#ifndef OBJECT3D_H
+#define OBJECT3D_H
 
 /* Represents any sort of object inhabiting 3d space. Any sort of 
    linear transformations can be applied to these objects: rotations, 
@@ -43,3 +45,5 @@ class Object3D {
       Object3D& lerp(Vector3f a, Vector3f b, float t);
 
 };
+
+#endif
