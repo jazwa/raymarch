@@ -3,10 +3,11 @@
 #include <Eigen/Dense>
 #include <algorithm>
 #include <texture.h>
+#include <object3d.h>
 
 using namespace Eigen;
 
-class Shape {
+class Shape : public Object3D {
     protected:
         Texture texture;
     public:
