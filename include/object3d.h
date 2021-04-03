@@ -23,11 +23,13 @@ class Object3D {
       Matrix4f current_inverse;
 
       void update_inverse();
-      unsigned int update_ref = 0;
+      unsigned int update_ref;
 
    public:
       Object3D() {
          current_transform = Matrix4f::Identity();
+         current_inverse = Matrix4f::Identity();
+         update_ref = 0;
       }
 
       Matrix4f& get_transform_matrix() {

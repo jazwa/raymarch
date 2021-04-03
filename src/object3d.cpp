@@ -6,12 +6,13 @@ using Eigen::Matrix4f, Eigen::Vector3f;
 
 void Object3D::apply_transform(Matrix4f& mat) {
     this->current_transform = mat * this->current_transform;
-    update_ref++;
+    this->update_ref++;
 }
 
 void Object3D::reset_transform() {
     this->current_transform = Matrix4f::Identity();
-    update_ref++;
+    this->current_inverse = Matrix4f::Identity();
+    this->update_ref = 0;
 }
 
 
@@ -20,6 +21,7 @@ void Object3D::update_inverse() {
     // This requires Eigen/LU, but to my knowledge, for 4by4
     // matrices, a hardcoded formula for the inverse is used.
     this->current_inverse = (this->current_transform).inverse();
+    this->update_ref = 0;
 }
 
 void Object3D::apply_rotate(float rx, float ry, float rz) {
