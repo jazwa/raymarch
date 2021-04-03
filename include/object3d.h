@@ -16,9 +16,7 @@ using Eigen::Matrix4f, Eigen::Vector3f;
 
 class Object3D {
    private:
-      // Right now, all transformations are represented using 
-      // 3x3 matrices, these matrices encode translation and rotation
-      // TODO: implement quaternions and scaling
+      // TODO: implement quaternions
       Matrix4f current_transform;
       Matrix4f current_inverse;
 
