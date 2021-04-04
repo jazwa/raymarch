@@ -3,6 +3,7 @@
 #include <simulation.h>
 #include <fstream>
 #include <chrono>
+#include "lodepng.h"
 
 using namespace Eigen;
 
@@ -17,8 +18,8 @@ int main(void) {
     Simulation sim;
     cout << "Simulation info: " << sim.width  << ", " << sim.height << endl;
 
-    for (int step = 0; step < sim.num_frames; step++) {
-        cout << "Rendering: " << step+1 << " out of " << sim.num_frames << endl;
+    for (int step = 0; step < (sim.scene)->num_steps(); step++) {
+        cout << "Rendering: " << step+1 << " out of " << (sim.scene)->num_steps() << endl;
 
         auto start_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
         
@@ -45,7 +46,6 @@ int main(void) {
             }
         }
         ofs.close();
-
     }
 
 }

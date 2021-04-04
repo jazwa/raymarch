@@ -1,23 +1,9 @@
 
 #include "simulation.h"
+#include "scene.h"
 #include <iostream>
 #include <limits>
 #include <thread>
-
-std::shared_ptr<Shape> Simulation::nearest_shape(Vector3f& p) {
-
-    std::shared_ptr<Shape> ret = nullptr;
-    float min_distance = std::numeric_limits<float>::infinity();
-
-    for (auto& s : scene_shapes) {
-        float d = s->wdist(p);
-        if (d < min_distance) {
-            ret = s;
-            min_distance = d;
-        }
-    }
-    return ret;
-}
 
 Vector3i Simulation::raymarch(Vector3f& dir) {
     int max_steps = 128;
@@ -25,18 +11,18 @@ Vector3i Simulation::raymarch(Vector3f& dir) {
 
     for (int step = 0; step < max_steps; step++) {
         
-        if (abs(curr[0]) >= sim_bounds || 
-            abs(curr[1]) >= sim_bounds || 
-            abs(curr[2]) >= sim_bounds) 
+        if (abs(curr[0]) >= scene->bounds || 
+            abs(curr[1]) >= scene->bounds || 
+            abs(curr[2]) >= scene->bounds) 
         {
-            return background.get_pixel_color();
+            return scene->background.get_pixel_color();
         }
 
-        auto nearest = nearest_shape(curr);
+        auto nearest = scene->nearest_shape(curr);
 
         if (nearest == nullptr) {
             /* TODO handle this */
-            return background.get_pixel_color();
+            return scene->background.get_pixel_color();
         }
         float nearest_dist = nearest->wdist(curr);
         if (nearest_dist < eps) {
@@ -46,7 +32,7 @@ Vector3i Simulation::raymarch(Vector3f& dir) {
         /* move the ray forward by the length of the nearest shape */
         curr = curr + nearest_dist*dir;
     }
-    return background.get_pixel_color();
+    return scene->background.get_pixel_color();
 }
 
 
@@ -85,4 +71,6 @@ void Simulation::render_step() {
         if (t.joinable())
             t.join();
     }
+
+    this->scene->step_time();
 }

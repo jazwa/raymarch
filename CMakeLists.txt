@@ -10,6 +10,11 @@ include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${LIBIGL_INCLUDE_DIR})
 
+add_library(lodepng STATIC lib/lodepng/lodepng.cpp)
+
+include_directories(${PROJECT_SOURCE_DIR}/lib/lodepng)
+link_directories(${PROJECT_SOURCE_DIR}/lib/lodepng)
+
 file(GLOB H_FILES ${PROJECT_SOURCE_DIR}/include/*.h)
 file(GLOB CPP_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
@@ -17,7 +22,7 @@ find_package (Eigen3 3.3.9 REQUIRED NO_MODULE)
 
 add_compile_options(-Wall -Wextra -pedantic -Werror -O3)
 
-add_executable(${PROJECT_NAME} main.cpp  ${H_FILES} ${CPP_FILES})
+add_executable(${PROJECT_NAME} main.cpp ${H_FILES} ${CPP_FILES})
 
-target_link_libraries (${PROJECT_NAME} Eigen3::Eigen)
+target_link_libraries (${PROJECT_NAME} Eigen3::Eigen lodepng)
 

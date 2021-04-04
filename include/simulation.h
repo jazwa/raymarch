@@ -6,7 +6,10 @@
 #include <map>
 #include <texture.h>
 #include <shape.h>
+#include <sample_scenes/helix.h>
+#include <sample_scenes/moving-torus.h>
 #include <camera.h>
+#include <scene.h>
 #include <cmath>
 
 using namespace Eigen;
@@ -20,26 +23,25 @@ class Simulation {
         Camera cam;
 
         void raymarch_worker_thread(int idx, int work);
-
-        /* shapes in the scene */
+/* 
         std::vector<std::shared_ptr<Shape>> scene_shapes;
-
+ */
         const float eps = 0.005;
-        const float sim_bounds = 6.0;
-        Texture background = Texture(222,222,222);
 
     public:
         /* Options for the simulation output */
         const int width = 480;
         const int height = 360;
         const float fov = 90.0;
-        const int num_frames = 1;
+        std::unique_ptr<Scene> scene;
+
 
         Simulation() {
             /* cache align to hopefully reduce false sharing */
             /* TODO find a better way to represent this */
             frame_buffer = static_cast<int*>(aligned_alloc(64, sizeof(int)*3*width*height));
             cam = Camera(Vector3f(0,0,0), width, height, fov);
+            scene = std::make_unique<Moving_torus_scene>();
 
             
             //scene_shapes.push_back(std::make_shared<Plane>(Vector3f(-1, -1, 2), Vector3f(0, 0.5, -0.1), Vector3d(30,30,200)));
@@ -48,62 +50,7 @@ class Simulation {
             //std::shared_ptr<Capsule> cap = std::make_shared<Capsule>(Vector3f(-1.0,0.0,1.0), Vector3f(1.0, 0.0, 1.0), 0.1, Texture(255, 30,30));
             //cap->apply_translate(Vector3f(0,0.5,0.0));
             //scene_shapes.push_back(cap);
-            
-            //std::shared_ptr<Sphere> sph = std::make_shared<Sphere>(Vector3f(1.5,0.5,2.0), 0.5, Texture(255, 30,30));
-            //sph->apply_rotate_y(M_PI/4.0);
-            //scene_shapes.push_back(sph);
 
-            std::shared_ptr<Torus> tor = std::make_shared<Torus>(0.4, 0.1, Texture(255, 30,30));
-            tor->apply_translate(Vector3f(0.0,0.0, 1.0));
-            tor->apply_rotate_x(M_PI/4.0);
-            tor->apply_rotate_y(M_PI/4.0);
-            scene_shapes.push_back(tor);
-            
-
-            /* example dna sequence */
-            /* std::string dna_seq = "ggggaacccgcatgaaggtccgagtgagggcatgaacaagtcctactccacggtacggacattggctctgaacgcggaggtcatgtgttgttatgggggc";
-            
-            std::map<char, char> comp_base = {
-                {'a', 't'},
-                {'t', 'a'},
-                {'c', 'g'},
-                {'g', 'c'}
-            };
-            std::map<char, Texture> base_color = {
-                {'a', Texture(0, 127, 255)}, // adenine -> azure
-                {'t', Texture(253, 245, 1)}, // thymine -> tweety bird
-                {'c', Texture(20, 253, 20)}, // guanine -> green
-                {'g', Texture(150, 10, 24)}  // cytosine -> carmine
-            };
-
-            // this might not be the right name
-            Texture pentose_color = Texture(170, 120, 230);
-
-            // simplified double helix
-            for (int y_idx = 0; y_idx <= 50; y_idx++) { 
-                
-                float y = -2.5 + 0.1*((float)y_idx);
-                float cir_rad = 0.115;
-                float snd_point_bias = 0.62;
-                float z_bias = 3.0;
-                float cyl_rad = 0.03;
-                Vector3f pointA, pointB, midpoint;
-
-                pointA << 0.5*sin(4.0*y),
-                          y,
-                          z_bias + 0.5*cos(4.0*y);
-
-                pointB << 0.5*sin(4.0*(y+snd_point_bias)),
-                          y,
-                          z_bias + 0.5*cos(4.0*(y+snd_point_bias));
-
-                midpoint = pointA + 0.5*(pointB - pointA);
-
-                scene_shapes.push_back(std::make_shared<Sphere>(pointA, cir_rad, pentose_color));
-                scene_shapes.push_back(std::make_shared<Sphere>(pointB, cir_rad, pentose_color));
-                scene_shapes.push_back(std::make_shared<Capsule>(pointA, midpoint, cyl_rad, base_color[dna_seq[y_idx]]));
-                scene_shapes.push_back(std::make_shared<Capsule>(midpoint, pointB, cyl_rad, base_color[comp_base[dna_seq[y_idx]]]));
-            }*/
         }
 
         ~Simulation() {
@@ -112,8 +59,6 @@ class Simulation {
 
         /* determine the color of every pixel, write to the frame_buffer */
         void render_step();
-
-        std::shared_ptr<Shape> nearest_shape(Vector3f& p);
 
         Vector3i raymarch(Vector3f& dir);
 
