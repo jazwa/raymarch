@@ -77,7 +77,6 @@ void Simulation::render_step() {
     
     std::vector<std::thread> workers;
 
-    /* I really don't know what I'm doing here */
     for (int t = 0; t < num_threads; t++) {
         workers.push_back(std::thread(&Simulation::raymarch_worker_thread, this, t*work_per_thread, work_per_thread));
     }

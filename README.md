@@ -27,6 +27,5 @@ Sample renders:
     * Allow transformations to be grouped together. ie. group rotate and scale.
     * Figure out a good interpolation solution:
       * Make iterated transformations more efficient (transformations on transformations, instead of transformations on objects)
-    * Organize scenes
-      
-
+    * Organize scenes, and general clean up
+    * Sit down and actually profile the code
