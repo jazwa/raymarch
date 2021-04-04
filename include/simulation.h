@@ -45,15 +45,20 @@ class Simulation {
             //scene_shapes.push_back(std::make_shared<Plane>(Vector3f(-1, -1, 2), Vector3f(0, 0.5, -0.1), Vector3d(30,30,200)));
             //scene_shapes.push_back(std::make_shared<Plane>(Vector3f(-1, 0, 3), Vector3f(0.5, 0.5, -1.0), Vector3d(30,200,45)));
             
-            std::shared_ptr<Capsule> cap = std::make_shared<Capsule>(Vector3f(-1.0,0.0,3.0), Vector3f(1.0, 0.0, 3.0), 0.2, Texture(255, 30,30));
+            //std::shared_ptr<Capsule> cap = std::make_shared<Capsule>(Vector3f(-1.0,0.0,1.0), Vector3f(1.0, 0.0, 1.0), 0.1, Texture(255, 30,30));
+            //cap->apply_translate(Vector3f(0,0.5,0.0));
+            //scene_shapes.push_back(cap);
             
             //std::shared_ptr<Sphere> sph = std::make_shared<Sphere>(Vector3f(1.5,0.5,2.0), 0.5, Texture(255, 30,30));
             //sph->apply_rotate_y(M_PI/4.0);
             //scene_shapes.push_back(sph);
 
-            //std::shared_ptr<Torus> tor = std::make_shared<Torus>(0.4, 0.1, Texture(255, 30,30));
-            //tor->apply_translate(Vector3f(0.0,0.0, 1.0));
-            //scene_shapes.push_back(tor);
+            std::shared_ptr<Torus> tor = std::make_shared<Torus>(0.4, 0.1, Texture(255, 30,30));
+            tor->apply_translate(Vector3f(0.0,0.0, 1.0));
+            tor->apply_rotate_x(M_PI/4.0);
+            tor->apply_rotate_y(M_PI/4.0);
+            scene_shapes.push_back(tor);
+            
 
             /* example dna sequence */
             /* std::string dna_seq = "ggggaacccgcatgaaggtccgagtgagggcatgaacaagtcctactccacggtacggacattggctctgaacgcggaggtcatgtgttgttatgggggc";
@@ -98,7 +103,7 @@ class Simulation {
                 scene_shapes.push_back(std::make_shared<Sphere>(pointB, cir_rad, pentose_color));
                 scene_shapes.push_back(std::make_shared<Capsule>(pointA, midpoint, cyl_rad, base_color[dna_seq[y_idx]]));
                 scene_shapes.push_back(std::make_shared<Capsule>(midpoint, pointB, cyl_rad, base_color[comp_base[dna_seq[y_idx]]]));
-            } */
+            }*/
         }
 
         ~Simulation() {

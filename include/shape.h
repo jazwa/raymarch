@@ -94,7 +94,7 @@ class Torus: public Shape {
         float radius;
 
         float object_sdf(Vector3f p) {
-            Vector2f p_to_slice_center = Vector2f(Vector2f(p(0), p(2)).norm() - r_dist, p(2));
+            Vector2f p_to_slice_center = Vector2f(Vector2f(p(0), p(2)).norm() - r_dist, p(1));
             return p_to_slice_center.norm() - radius;
         }
 
@@ -126,9 +126,6 @@ class Capsule: public Shape {
             this->radius = radius;
             this->texture = texture;
         }
-
-        
-
 };
 
 
