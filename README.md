@@ -18,10 +18,15 @@ Sample renders:
 ![dhelix](assets/dna.png)
 
 ## Todo
-    * Support arbitrary transformations for objects (cameras, shapes)
     * Allow creation of GIF animations by stringing together images
     * Support lighting and shadows
+    * Support textures
     * Add CSG primitives
     * Implement triangle inequality optimization
-    * Octree binning
+    * Some sort of spatial binning
+    * Allow transformations to be grouped together. ie. group rotate and scale.
+    * Figure out a good interpolation solution:
+      * Make iterated transformations more efficient (transformations on transformations, instead of transformations on objects)
+    * Organize scenes
+      
 

@@ -61,7 +61,8 @@ class Object3D {
       void apply_scale(float factor);
 
       // Rotate based on basic rotations - radians
-      // The coordinate system is right-handed, with z pointing up
+      // The coordinate system is left-handed, with y pointing up
+      // TODO: change to right-handed
       void apply_rotate(float rx, float ry, float rz);
       void apply_rotate_x(float rx);
       void apply_rotate_y(float ry);
