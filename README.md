@@ -21,7 +21,7 @@ Sample renders:
 
 ## Todo
     * Unified pipeline from animation to gif file
-    * Learn cmake and file the cmakelists file
+    * Learn cmake and fix the cmakelists file
     * Command line option
     * Support lighting and shadows
     * Support textures
