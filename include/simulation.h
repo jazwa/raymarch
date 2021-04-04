@@ -30,8 +30,8 @@ class Simulation {
 
     public:
         /* Options for the simulation output */
-        const int width = 480;
-        const int height = 360;
+        const int width = 1280;
+        const int height = 720;
         const float fov = 90.0;
         std::unique_ptr<Scene> scene;
 

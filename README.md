@@ -17,8 +17,12 @@ Sample renders:
 
 ![dhelix](assets/dna.png)
 
+![torus](assets/tor.gif)
+
 ## Todo
-    * Allow creation of GIF animations by stringing together images
+    * Unified pipeline from animation to gif file
+    * Learn cmake and file the cmakelists file
+    * Command line option
     * Support lighting and shadows
     * Support textures
     * Add CSG primitives
