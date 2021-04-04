@@ -34,10 +34,11 @@ void Object3D::apply_rotate(float rx, float ry, float rz) {
     const float sinz = sin(rz);
 
     Matrix4f rotate_mat = Matrix4f();
-    rotate_mat << cosz*cosy, cosz*siny*sinx - sinz*cosx, cosz*siny*cosx + sinz*sinx, 0,
-                  sinz*cosy, sinz*siny*sinx + cosz*cosx, sinz*siny*cosx - cosz*sinx, 0,
-                  (-1)*siny,                  cosy*sinx,                  cosy*cosx, 0,
-                          0,                          0,                          0, 1;
+    rotate_mat << 
+        cosz*cosy, cosz*siny*sinx - sinz*cosx, cosz*siny*cosx + sinz*sinx, 0,
+        sinz*cosy, sinz*siny*sinx + cosz*cosx, sinz*siny*cosx - cosz*sinx, 0,
+        (-1)*siny,                  cosy*sinx,                  cosy*cosx, 0,
+                0,                          0,                          0, 1;
 
     this->apply_transform(rotate_mat);
 }

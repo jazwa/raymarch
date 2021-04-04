@@ -4,8 +4,7 @@
 #include <stdint.h>
 #include <Eigen/Dense>
 #include <iostream>
-
-#define PI 3.14159265
+#include <cmath>
 
 /* TODO: support arbitrary camera transforms */
 
@@ -25,7 +24,7 @@ class Camera {
             this->frame_width = static_cast<float>(width);
             this->frame_height = static_cast<float>(height);
             this->aspect_ratio = frame_width / frame_height;
-            this->fov = (fov * PI) / 180.0;
+            this->fov = (fov * M_PI) / 180.0;
         }
 
         /* return the direction of a ray in worldspace that corresponds to given screen space values */

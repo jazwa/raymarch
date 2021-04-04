@@ -7,6 +7,7 @@
 #include <texture.h>
 #include <shape.h>
 #include <camera.h>
+#include <cmath>
 
 using namespace Eigen;
 
@@ -40,13 +41,22 @@ class Simulation {
             frame_buffer = static_cast<int*>(aligned_alloc(64, sizeof(int)*3*width*height));
             cam = Camera(Vector3f(0,0,0), width, height, fov);
 
-            /* scene_shapes.push_back(std::make_shared<Sphere>(Vector3f(0,-1.0,3.0), 1.0, Vector3d(255,30,30)));
-            scene_shapes.push_back(std::make_shared<Plane>(Vector3f(-1, -1, 2), Vector3f(0, 0.5, -0.1), Vector3d(30,30,200)));
-            scene_shapes.push_back(std::make_shared<Plane>(Vector3f(-1, 0, 3), Vector3f(0.5, 0.5, -1.0), Vector3d(30,200,45)));
-            scene_shapes.push_back(std::make_shared<Capsule>(Vector3f(-1.0,0.0,3.0), Vector3f(1.0, 1.0, 2.0), 0.2, Vector3d(255, 30,30))); */
+            
+            //scene_shapes.push_back(std::make_shared<Plane>(Vector3f(-1, -1, 2), Vector3f(0, 0.5, -0.1), Vector3d(30,30,200)));
+            //scene_shapes.push_back(std::make_shared<Plane>(Vector3f(-1, 0, 3), Vector3f(0.5, 0.5, -1.0), Vector3d(30,200,45)));
+            
+            std::shared_ptr<Capsule> cap = std::make_shared<Capsule>(Vector3f(-1.0,0.0,3.0), Vector3f(1.0, 0.0, 3.0), 0.2, Texture(255, 30,30));
+            
+            //std::shared_ptr<Sphere> sph = std::make_shared<Sphere>(Vector3f(1.5,0.5,2.0), 0.5, Texture(255, 30,30));
+            //sph->apply_rotate_y(M_PI/4.0);
+            //scene_shapes.push_back(sph);
+
+            //std::shared_ptr<Torus> tor = std::make_shared<Torus>(0.4, 0.1, Texture(255, 30,30));
+            //tor->apply_translate(Vector3f(0.0,0.0, 1.0));
+            //scene_shapes.push_back(tor);
 
             /* example dna sequence */
-            std::string dna_seq = "ggggaacccgcatgaaggtccgagtgagggcatgaacaagtcctactccacggtacggacattggctctgaacgcggaggtcatgtgttgttatgggggc";
+            /* std::string dna_seq = "ggggaacccgcatgaaggtccgagtgagggcatgaacaagtcctactccacggtacggacattggctctgaacgcggaggtcatgtgttgttatgggggc";
             
             std::map<char, char> comp_base = {
                 {'a', 't'},
@@ -61,10 +71,10 @@ class Simulation {
                 {'g', Texture(150, 10, 24)}  // cytosine -> carmine
             };
 
-            /* this might not be the right name */
+            // this might not be the right name
             Texture pentose_color = Texture(170, 120, 230);
 
-            /* simplified double helix */ 
+            // simplified double helix
             for (int y_idx = 0; y_idx <= 50; y_idx++) { 
                 
                 float y = -2.5 + 0.1*((float)y_idx);
@@ -88,7 +98,7 @@ class Simulation {
                 scene_shapes.push_back(std::make_shared<Sphere>(pointB, cir_rad, pentose_color));
                 scene_shapes.push_back(std::make_shared<Capsule>(pointA, midpoint, cyl_rad, base_color[dna_seq[y_idx]]));
                 scene_shapes.push_back(std::make_shared<Capsule>(midpoint, pointB, cyl_rad, base_color[comp_base[dna_seq[y_idx]]]));
-            }
+            } */
         }
 
         ~Simulation() {

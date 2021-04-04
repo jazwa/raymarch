@@ -12,7 +12,7 @@
 
 #include <Eigen/Core>
 
-using Eigen::Matrix4f, Eigen::Vector3f;
+using Eigen::Matrix4f, Eigen::Vector3f, Eigen::Matrix3f;
 
 class Object3D {
    private:
@@ -41,6 +41,21 @@ class Object3D {
          return current_inverse;
       };
 
+      Vector3f inv_affine(Vector3f& worldspace_vect) {
+         Matrix4f inv = get_inverse_trans();
+         //Matrix3f aff_mat = Matrix3f();
+
+         Matrix3f aff_mat = inv.block<3,3>(0, 0);
+
+         Vector3f inv_translation = Vector3f();
+         inv_translation[0] = inv(0,3);
+         inv_translation[1] = inv(1,3);
+         inv_translation[2] = inv(2,3);
+
+         Vector3f what = worldspace_vect+inv_translation;
+         return aff_mat * what; // TODO: this right order?
+      }
+
       // Apply various transformation to the object, saves the 
       // final state of the object. These are STATEFUL operations
       void apply_scale(float factor);
@@ -56,7 +71,7 @@ class Object3D {
       void apply_translate(Vector3f dir, float mag);
       void apply_translate(Vector3f disp);
 
-      // Apply general 4d transform
+      // Apply general 3d transform
       void apply_transform(Matrix4f& trans);
 
       void reset_transform();

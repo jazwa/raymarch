@@ -10,7 +10,7 @@ std::shared_ptr<Shape> Simulation::nearest_shape(Vector3f& p) {
     float min_distance = std::numeric_limits<float>::infinity();
 
     for (auto& s : scene_shapes) {
-        float d = s->sdf(p);
+        float d = s->wdist(p);
         if (d < min_distance) {
             ret = s;
             min_distance = d;
@@ -38,7 +38,7 @@ Vector3i Simulation::raymarch(Vector3f& dir) {
             /* TODO handle this */
             return background.get_pixel_color();
         }
-        float nearest_dist = nearest->sdf(curr);
+        float nearest_dist = nearest->wdist(curr);
         if (nearest_dist < eps) {
             return nearest->get_texture().get_pixel_color();
         }
