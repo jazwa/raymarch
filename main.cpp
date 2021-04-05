@@ -7,27 +7,29 @@
 
 using namespace Eigen;
 
-using std::cout, std::endl, std::ofstream, std::ios_base;
+using std::cout, std::endl, std::ofstream, std::ios_base, std::string;
 using std::chrono::duration_cast;
 using std::chrono::milliseconds;
 using std::chrono::seconds;
 using std::chrono::system_clock;
 
+inline std::string render_loading_string(int curr, int total);
+
 int main(void) {
 
     Simulation sim;
-    cout << "Simulation info: " << sim.width  << ", " << sim.height << endl;
+    cout << "Frame size: " << sim.width  << ", " << sim.height << endl;
+    cout << "Num frames: " << sim.scene->num_steps() << endl;
+    cout << "Starting render...🚀 " << endl;
+
+    auto start_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 
     for (int step = 0; step < (sim.scene)->num_steps(); step++) {
-        cout << "Rendering: " << step+1 << " out of " << (sim.scene)->num_steps() << endl;
+        
+        cout << render_loading_string(step+1, sim.scene->num_steps()) << "\r" << std::flush;
 
-        auto start_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-        
-        /* render frame */
+        // render frame
         sim.render_step();
-        
-        auto end_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-        cout << "Time: "<< end_time - start_time << "msec" << endl;
 
         /* write to ppm file */
         int* frame_buffer = sim.get_current_frame();
@@ -47,5 +49,21 @@ int main(void) {
         }
         ofs.close();
     }
+    
+    auto end_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+    cout << "\n🛎️  Done! Total Time: "<< end_time - start_time << "ms" << endl;
 
+    return 0;
+}
+
+
+inline std::string render_loading_string(int curr, int total) {
+    
+    const int loading_bar_len = 64;
+    float percent_done = static_cast<float>(curr) / static_cast<float>(total);
+    const int num_done = static_cast<int>(percent_done*loading_bar_len);
+
+
+    return "(Frame: " + std::to_string(curr) + "/" + std::to_string(total) + ") " 
+            + '[' + string(num_done, '#') + ">" + string(loading_bar_len-num_done, '.') + ']' + string(8, ' ');
 }

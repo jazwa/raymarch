@@ -15,7 +15,7 @@ class Moving_torus_scene : public Scene {
     public:
     
         Moving_torus_scene() {
-            this->scene_time_steps = 64;
+            this->scene_time_steps = 32;
 
             start = Vector3f(-1.5, -1.5, 2.0);
             end = Vector3f(0.0, 0.1, 2.5);

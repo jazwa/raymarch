@@ -7,6 +7,7 @@
 
 #include "shape.h"
 #include <vector>
+#include <memory>
 #include <Eigen/Core>
 
 using Eigen::Vector3f, Eigen::Vector3i;

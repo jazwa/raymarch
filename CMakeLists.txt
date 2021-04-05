@@ -20,6 +20,8 @@ file(GLOB CPP_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
 find_package (Eigen3 3.3.9 REQUIRED NO_MODULE)
 
+set(CMAKE_CXX_FLAGS -pthread)
+
 add_compile_options(-Wall -Wextra -pedantic -Werror -O3)
 
 add_executable(${PROJECT_NAME} main.cpp ${H_FILES} ${CPP_FILES})

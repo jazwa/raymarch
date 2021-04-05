@@ -23,9 +23,7 @@ class Simulation {
         Camera cam;
 
         void raymarch_worker_thread(int idx, int work);
-/* 
-        std::vector<std::shared_ptr<Shape>> scene_shapes;
- */
+
         const float eps = 0.005;
 
     public:
@@ -41,15 +39,9 @@ class Simulation {
             /* TODO find a better way to represent this */
             frame_buffer = static_cast<int*>(aligned_alloc(64, sizeof(int)*3*width*height));
             cam = Camera(Vector3f(0,0,0), width, height, fov);
+            
+            // choose scene to create
             scene = std::make_unique<Moving_torus_scene>();
-
-            
-            //scene_shapes.push_back(std::make_shared<Plane>(Vector3f(-1, -1, 2), Vector3f(0, 0.5, -0.1), Vector3d(30,30,200)));
-            //scene_shapes.push_back(std::make_shared<Plane>(Vector3f(-1, 0, 3), Vector3f(0.5, 0.5, -1.0), Vector3d(30,200,45)));
-            
-            //std::shared_ptr<Capsule> cap = std::make_shared<Capsule>(Vector3f(-1.0,0.0,1.0), Vector3f(1.0, 0.0, 1.0), 0.1, Texture(255, 30,30));
-            //cap->apply_translate(Vector3f(0,0.5,0.0));
-            //scene_shapes.push_back(cap);
 
         }
 
