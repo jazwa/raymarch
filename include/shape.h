@@ -23,7 +23,7 @@ class Shape : public Object3D {
             return this->object_sdf(this->inv_affine(p));
         }
         Vector3f wnormal(Vector3f p) {
-            return this->object_normal(this->inv_affine(p));
+            return this->transform_dir(this->object_normal(this->inv_affine(p)));
         }
 
         virtual ~Shape() {}
@@ -62,11 +62,9 @@ class Sphere: public Shape {
 
 class Plane: public Shape {
     private:
-        Vector3f point;
-        Vector3f normal;
-
         float object_sdf(Vector3f p) {
-            return p[1]; // y value
+            // we need the absolute value, otherwise this would define a halfspace
+            return abs(p[1]);
         }
 
         Vector3f object_normal(Vector3f p) {

@@ -26,13 +26,16 @@ class Simulation {
 
         void raymarch_worker_thread(int idx, int work);
 
-        const float eps = 0.005;
+        const float eps = 0.0005;
 
     public:
         /* Options for the simulation output */
-        const int width = 480;
-        const int height = 360;
+        const int width = 1280;
+        const int height = 720;
         const float fov = 90.0;
+        //bool lighting_on = false;
+        bool lighting_on = true;
+
         std::unique_ptr<Scene> scene;
 
 
@@ -56,7 +59,7 @@ class Simulation {
 
         Vector3i raymarch(Vector3f& dir);
 
-        Vector3i light_contribution(std::shared_ptr<PointLight> light, Vector3f surface_point, std::shared_ptr<Shape> shape);
+        Vector3f light_contribution(std::shared_ptr<PointLight> light, Vector3f surface_point, std::shared_ptr<Shape> shape);
 
         /* return a pointer to the frame_buffer, not the safest */
         int* get_current_frame() {
