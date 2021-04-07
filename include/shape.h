@@ -1,5 +1,6 @@
 #ifndef SHAPE_H
 #define SHAPE_H
+
 #include <Eigen/Dense>
 #include <algorithm>
 #include <texture.h>
@@ -12,11 +13,17 @@ class Shape : public Object3D {
     protected:
         Texture texture;
         virtual float object_sdf(Vector3f p) = 0;
+        // can either be analytical or approximate, prefer analytical
+        virtual Vector3f object_normal(Vector3f p) = 0;
 
     public:
 
+        // worldspace functions get the distance field and surface normals
         float wdist(Vector3f p) {
             return this->object_sdf(this->inv_affine(p));
+        }
+        Vector3f wnormal(Vector3f p) {
+            return this->object_normal(this->inv_affine(p));
         }
 
         virtual ~Shape() {}
@@ -32,6 +39,10 @@ class Sphere: public Shape {
 
         float object_sdf(Vector3f p) {
             return p.norm() - radius;
+        }
+        
+        Vector3f object_normal(Vector3f p) {
+            return p.normalized(); // not needed
         }
 
     public:
@@ -56,6 +67,11 @@ class Plane: public Shape {
 
         float object_sdf(Vector3f p) {
             return p[1]; // y value
+        }
+
+        Vector3f object_normal(Vector3f p) {
+            (void) p;
+            return Vector3f(0,1,0);
         }
 
     public:
@@ -98,6 +114,11 @@ class Torus: public Shape {
             return p_to_slice_center.norm() - radius;
         }
 
+        Vector3f object_normal(Vector3f p) {
+            Vector3f slice_center = Vector3f(p(0), 0, p(2)).normalized() * r_dist;
+            return (p-slice_center).normalized();
+        }
+
     public:
         Torus(float r_dist, float radius, Texture texture) {
             this->r_dist = r_dist;
@@ -118,6 +139,11 @@ class Capsule: public Shape {
             Vector3f c = a + t*(b-a);
             return (p-c).norm() - radius;
         }
+        
+        Vector3f object_normal(Vector3f p) {
+            (void)p;
+            assert(false); // TODO
+        }
 
     public:
         Capsule(Vector3f a, Vector3f b, float radius, Texture texture) {
@@ -127,8 +153,6 @@ class Capsule: public Shape {
             this->texture = texture;
         }
 };
-
-
 
 
 #endif

@@ -8,8 +8,10 @@
 #include <shape.h>
 #include <sample_scenes/helix.h>
 #include <sample_scenes/moving-torus.h>
+#include <sample_scenes/lighting.h>
 #include <camera.h>
 #include <scene.h>
+#include <light.h>
 #include <cmath>
 
 using namespace Eigen;
@@ -28,8 +30,8 @@ class Simulation {
 
     public:
         /* Options for the simulation output */
-        const int width = 1280;
-        const int height = 720;
+        const int width = 480;
+        const int height = 360;
         const float fov = 90.0;
         std::unique_ptr<Scene> scene;
 
@@ -41,7 +43,7 @@ class Simulation {
             cam = Camera(Vector3f(0,0,0), width, height, fov);
             
             // choose scene to create
-            scene = std::make_unique<Moving_torus_scene>();
+            scene = std::make_unique<LightingScene>();
 
         }
 
@@ -53,6 +55,8 @@ class Simulation {
         void render_step();
 
         Vector3i raymarch(Vector3f& dir);
+
+        Vector3i light_contribution(std::shared_ptr<PointLight> light, Vector3f surface_point, std::shared_ptr<Shape> shape);
 
         /* return a pointer to the frame_buffer, not the safest */
         int* get_current_frame() {

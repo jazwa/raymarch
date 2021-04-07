@@ -13,7 +13,10 @@ using Eigen::Vector3i;
 class Texture {
     private:
         Vector3i color;
+
     public:
+        float albedo = 0.18;
+        
         Texture(int r, int g, int b) {
             color = Vector3i(r,g,b);
         }

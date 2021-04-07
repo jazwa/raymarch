@@ -6,6 +6,7 @@
 */
 
 #include "shape.h"
+#include "light.h"
 #include <vector>
 #include <memory>
 #include <Eigen/Core>
@@ -22,12 +23,14 @@ class Scene {
         // internal representation of group of objects, jumping point to 
         // implement spatial binning
         std::vector<std::shared_ptr<Shape>> scene_shapes;
-        
+
     public:
         virtual ~Scene() {}
-
+        
         const float bounds = 6.0;
         Texture background = Texture(222,222,222);
+        // TODO: declare superclass for different light and objectify them
+        std::vector<std::shared_ptr<PointLight>> lights;
         
         std::shared_ptr<Shape> nearest_shape(Vector3f p) {
             std::shared_ptr<Shape> ret = nullptr;
@@ -43,6 +46,7 @@ class Scene {
 
             return ret;
         }
+
 
         void add_shape(std::shared_ptr<Shape> shape) {
             this->scene_shapes.push_back(shape);

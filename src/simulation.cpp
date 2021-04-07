@@ -3,7 +3,17 @@
 #include "scene.h"
 #include <iostream>
 #include <limits>
+#include <light.h>
 #include <thread>
+
+
+Vector3i Simulation::light_contribution(std::shared_ptr<PointLight> light, Vector3f surface_point, std::shared_ptr<Shape> shape) {
+    Vector3f curr = light->position;
+    (void) surface_point;
+    (void) shape;
+
+    return Vector3i(0,0,0);
+}
 
 Vector3i Simulation::raymarch(Vector3f& dir) {
     int max_steps = 128;
@@ -24,9 +34,18 @@ Vector3i Simulation::raymarch(Vector3f& dir) {
             /* TODO handle this */
             return scene->background.get_pixel_color();
         }
+
         float nearest_dist = nearest->wdist(curr);
         if (nearest_dist < eps) {
-            return nearest->get_texture().get_pixel_color();
+
+            Vector3i pixel_color = nearest->get_texture().get_pixel_color();
+            
+            // calculate the light contributions 
+            for (std::shared_ptr<PointLight> light: scene->lights) {
+                pixel_color += light_contribution(light, curr, nearest); // color is additive?
+            }
+
+            return pixel_color;
         }
 
         /* move the ray forward by the length of the nearest shape */

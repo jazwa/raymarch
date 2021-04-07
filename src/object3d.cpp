@@ -18,7 +18,7 @@ void Object3D::reset_transform() {
 
 void Object3D::update_inverse() {
     // The product of invertible matrices is invertible.
-    // This requires Eigen/LU, but to my knowledge, for 4by4
+    // This requires Eigen/LU, but to my knowledge, for 4x4
     // matrices, a hardcoded formula for the inverse is used.
     this->current_inverse = (this->current_transform).inverse();
     this->update_ref = 0;
