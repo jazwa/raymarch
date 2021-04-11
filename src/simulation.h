@@ -12,6 +12,7 @@
 #include <camera.h>
 #include <scene.h>
 #include <light.h>
+#include <option.h>
 #include <cmath>
 
 using namespace Eigen;
@@ -26,27 +27,23 @@ class Simulation {
 
         void raymarch_worker_thread(int idx, int work);
 
-        const float eps = 0.0005;
-
     public:
         /* Options for the simulation output */
-        const int width = 1280;
-        const int height = 720;
-        const float fov = 90.0;
-        //bool lighting_on = false;
-        bool lighting_on = true;
+        const float eps = 0.0005;
 
+        Option options;
         std::unique_ptr<Scene> scene;
 
 
         Simulation() {
             /* cache align to hopefully reduce false sharing */
             /* TODO find a better way to represent this */
-            frame_buffer = static_cast<int*>(aligned_alloc(64, sizeof(int)*3*width*height));
-            cam = Camera(Vector3f(0,0,0), width, height, fov);
+
+            frame_buffer = static_cast<int*>(aligned_alloc(64, sizeof(int)*3*options.width*options.height));
+            cam = Camera(Vector3f(0,0,0), options.width, options.height, options.fov);
             
             // choose scene to create
-            scene = std::make_unique<LightingScene>();
+            scene = options.get_scene();
 
         }
 

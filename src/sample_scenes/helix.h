@@ -1,3 +1,5 @@
+#ifndef DNA_HELIX_SCENE_H
+#define DNA_HELIX_SCENE_H
 
 #include "scene.h"
 #include "shape.h"
@@ -61,3 +63,5 @@ class DNA_helix_scene : public Scene {
 
         void step_time() {}
 };
+
+#endif

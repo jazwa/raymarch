@@ -88,7 +88,7 @@ Vector3i Simulation::raymarch(Vector3f& dir) {
 
             Vector3i pixel_color = nearest->get_texture().get_pixel_color();
 
-            if (this->lighting_on) {
+            if (this->options.lighting) {
                 // calculate the light contributions 
                 Vector3f light_modifier = Vector3f(0.0,0.0,0.0);
 
@@ -110,21 +110,21 @@ Vector3i Simulation::raymarch(Vector3f& dir) {
         /* move the ray forward by the length of the nearest shape */
         curr = curr + nearest_dist*dir;
     }
-    return scene->background.get_pixel_color();
+    return this->scene->background.get_pixel_color();
 }
 
 
 void Simulation::raymarch_worker_thread(int i, int work) {
 
-    for (int idx = i; idx < i+work && idx < height*width; idx++) {
-        int yidx = idx / width;
-        int xidx = idx % width;
+    for (int idx = i; idx < i+work && idx < options.height*options.width; idx++) {
+        int yidx = idx / options.width;
+        int xidx = idx % options.width;
 
         Vector3f dir = cam.pixel_ray(xidx, yidx);
         Vector3i pixel_color = raymarch(dir);
 
         /* write to the frame buffer */
-        int fb_idx = 3*(yidx*width + xidx);
+        int fb_idx = 3*(yidx*options.width + xidx);
         frame_buffer[fb_idx] = pixel_color[0];
         frame_buffer[fb_idx+1] = pixel_color[1];
         frame_buffer[fb_idx+2] = pixel_color[2];
@@ -135,7 +135,7 @@ void Simulation::render_step() {
 
     int num_threads = 32;
 
-    int work_per_thread = ceil((height*width) / (double)num_threads);
+    int work_per_thread = ceil((options.height*options.width) / (double)num_threads);
     /* Nearest upper multiple of cache line size */
     work_per_thread = ((work_per_thread-1)/64) * 64 + 64;
     

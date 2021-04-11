@@ -1,3 +1,5 @@
+#ifndef MOVING_TORUS_SCENE_H
+#define MOVING_TORUS_SCENE_H
 
 #include "scene.h"
 #include "shape.h"
@@ -39,3 +41,5 @@ class Moving_torus_scene : public Scene {
             this->curr_t += this->dt;
         }
 };
+
+#endif

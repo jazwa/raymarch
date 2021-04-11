@@ -18,7 +18,7 @@ inline std::string render_loading_string(int curr, int total);
 int main(void) {
 
     Simulation sim;
-    cout << "Frame size: " << sim.width  << ", " << sim.height << endl;
+    cout << "Frame size: " << sim.options.width  << ", " << sim.options.height << endl;
     cout << "Num frames: " << sim.scene->num_steps() << endl;
     cout << "Starting render...🚀 " << endl;
 
@@ -36,11 +36,11 @@ int main(void) {
 
         std::string filename = "img" + std::to_string(step) + ".ppm";
         ofstream ofs(filename, ios_base::out | ios_base::binary);
-        ofs << "P6" << endl << sim.width << ' ' << sim.height << endl << "255" << endl;
+        ofs << "P6" << endl << sim.options.width << ' ' << sim.options.height << endl << "255" << endl;
 
-        for (int j = 0; j < sim.height; j++) {
-            for (int i = 0; i < sim.width; i++) {
-                int idx = 3*(j*sim.width + i);
+        for (int j = 0; j < sim.options.height; j++) {
+            for (int i = 0; i < sim.options.width; i++) {
+                int idx = 3*(j*sim.options.width + i);
                 
                 ofs << (char) frame_buffer[idx] 
                     << (char) frame_buffer[idx+1]

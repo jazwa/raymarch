@@ -15,7 +15,7 @@ add_library(lodepng STATIC lib/lodepng/lodepng.cpp)
 include_directories(${PROJECT_SOURCE_DIR}/lib/lodepng)
 link_directories(${PROJECT_SOURCE_DIR}/lib/lodepng)
 
-file(GLOB H_FILES ${PROJECT_SOURCE_DIR}/include/*.h)
+file(GLOB H_FILES ${PROJECT_SOURCE_DIR}/src/*.h)
 file(GLOB CPP_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
 find_package (Eigen3 3.3.9 REQUIRED NO_MODULE)

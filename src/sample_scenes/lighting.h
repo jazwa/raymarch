@@ -1,3 +1,5 @@
+#ifndef LIGHT_SCENE_H
+#define LIGHT_SCENE_H
 
 #include "scene.h"
 #include "shape.h"
@@ -93,3 +95,5 @@ class LightingScene : public Scene {
             current_step++;
         }
 };
+
+#endif
