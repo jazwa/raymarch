@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 project(raymarch)
 
 include_directories(${PROJECT_SOURCE_DIR})
-include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${LIBIGL_INCLUDE_DIR})
 
 add_library(lodepng STATIC lib/lodepng/lodepng.cpp)

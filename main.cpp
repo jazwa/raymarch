@@ -63,7 +63,6 @@ inline std::string render_loading_string(int curr, int total) {
     float percent_done = static_cast<float>(curr) / static_cast<float>(total);
     const int num_done = static_cast<int>(percent_done*loading_bar_len);
 
-
     return "(Frame: " + std::to_string(curr) + "/" + std::to_string(total) + ") " 
             + '[' + string(num_done, '#') + ">" + string(loading_bar_len-num_done, '.') + ']' + string(8, ' ');
 }
