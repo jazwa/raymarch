@@ -12,18 +12,21 @@
 #include <camera.h>
 #include <scene.h>
 #include <light.h>
-#include <option.h>
+#include <thread>
+#include <simulation_option.h>
 #include <cmath>
 
 using namespace Eigen;
-
 class Simulation {
 
     private:
-        /* Holds pixel colors of current image after render step */
+        // Holds pixel colors of current image after render step
         int *frame_buffer;
-        /* Camera to shoot rays from */
+        // Camera to shoot rays from
         Camera cam;
+
+        // Worker pool, default initialized
+        std::vector<std::thread> workers;
 
         void raymarch_worker_thread(int idx, int work);
 
@@ -31,14 +34,13 @@ class Simulation {
         /* Options for the simulation output */
         const float eps = 0.0005;
 
-        Option options;
+        SimulationOption options;
         std::unique_ptr<Scene> scene;
 
 
         Simulation() {
             /* cache align to hopefully reduce false sharing */
             /* TODO find a better way to represent this */
-
             frame_buffer = static_cast<int*>(aligned_alloc(64, sizeof(int)*3*options.width*options.height));
             cam = Camera(Vector3f(0,0,0), options.width, options.height, options.fov);
             

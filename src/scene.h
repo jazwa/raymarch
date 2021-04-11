@@ -28,6 +28,8 @@ class Scene {
         virtual ~Scene() {}
         
         const float bounds = 6.0;
+        bool lighting = false;
+
         Texture background = Texture(222,222,222);
 
         // TODO: declare superclass for different light and objectify them

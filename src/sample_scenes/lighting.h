@@ -29,11 +29,14 @@ class LightingScene : public Scene {
         std::shared_ptr <PointLight> side_light;
 
     public:
-    
+
+
         LightingScene() {
             this->scene_time_steps = 64;
             this->current_step = 0;
             this->ambient_light = Vector3f(0.1, 0.1, 0.1);
+
+            this->lighting = true;
 
             Vector3f sphere_start = Vector3f(-1.5, 1.0, 2.2);
             Vector3f sphere_mid = Vector3f(-1.5, -1.0, 2.2);
@@ -47,7 +50,6 @@ class LightingScene : public Scene {
 
             sphere = make_shared<Sphere>(sphere_start, 0.5, Texture(100,255,255));
             add_shape(sphere);
-
 
 
             floor = make_shared<Plane>(0.0, 0.0, Texture(150,250,150));

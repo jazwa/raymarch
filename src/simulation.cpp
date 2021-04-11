@@ -88,7 +88,7 @@ Vector3i Simulation::raymarch(Vector3f& dir) {
 
             Vector3i pixel_color = nearest->get_texture().get_pixel_color();
 
-            if (this->options.lighting) {
+            if (this->scene->lighting) {
                 // calculate the light contributions 
                 Vector3f light_modifier = Vector3f(0.0,0.0,0.0);
 
@@ -133,15 +133,11 @@ void Simulation::raymarch_worker_thread(int i, int work) {
 
 void Simulation::render_step() {
 
-    int num_threads = 32;
-
-    int work_per_thread = ceil((options.height*options.width) / (double)num_threads);
+    int work_per_thread = ceil((options.height*options.width) / options.num_threads);
     /* Nearest upper multiple of cache line size */
     work_per_thread = ((work_per_thread-1)/64) * 64 + 64;
-    
-    std::vector<std::thread> workers;
 
-    for (int t = 0; t < num_threads; t++) {
+    for (int t = 0; t < options.num_threads; t++) {
         workers.push_back(std::thread(&Simulation::raymarch_worker_thread, this, t*work_per_thread, work_per_thread));
     }
 
@@ -150,5 +146,6 @@ void Simulation::render_step() {
             t.join();
     }
 
+    workers.clear();
     this->scene->step_time();
 }

@@ -1,17 +1,17 @@
-#ifndef OPTION_H
-#define OPTION_H
+#ifndef SIMULATION_OPTION_H
+#define SIMULATION_OPTION_H
 
 #include <scene.h>
 #include <sample_scenes/helix.h>
 #include <sample_scenes/moving-torus.h>
 #include <sample_scenes/lighting.h>
 
-struct Option {
+
+struct SimulationOption {
     const int width = 480;
     const int height = 360;
     const float fov = 90.0;
-
-    bool lighting = false;
+    const int num_threads = 32;
 
     enum SceneType {
         MOVING_TORUS,
