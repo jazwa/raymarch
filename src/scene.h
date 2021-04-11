@@ -29,8 +29,11 @@ class Scene {
         
         const float bounds = 6.0;
         Texture background = Texture(222,222,222);
+
         // TODO: declare superclass for different light and objectify them
         std::vector<std::shared_ptr<PointLight>> lights;
+
+        Vector3f ambient_light = Vector3f(0.05, 0.05, 0.05);
         
         std::shared_ptr<Shape> nearest_shape(Vector3f p) {
             std::shared_ptr<Shape> ret = nullptr;
@@ -50,6 +53,10 @@ class Scene {
 
         void add_shape(std::shared_ptr<Shape> shape) {
             this->scene_shapes.push_back(shape);
+        }
+
+        void add_light(std::shared_ptr<PointLight> plight) {
+            this->lights.push_back(plight);
         }
 
         // continue one step in the animation

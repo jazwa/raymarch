@@ -41,10 +41,14 @@ class Object3D {
          return current_inverse;
       };
 
+      Vector3f transform_dir(Vector3f object_normal) {
+         Matrix3f no_translation = get_transform_matrix().block<3,3>(0,0);
+         return no_translation * object_normal;
+      }
+
+
       Vector3f inv_affine(Vector3f& worldspace_vect) {
          Matrix4f inv = get_inverse_trans();
-         //Matrix3f aff_mat = Matrix3f();
-
          Matrix3f aff_mat = inv.block<3,3>(0, 0);
 
          Vector3f inv_translation = Vector3f();
