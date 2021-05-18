@@ -32,7 +32,7 @@ class LightingScene : public Scene {
 
 
         LightingScene() {
-            this->scene_time_steps = 64;
+            this->scene_time_steps = 4;
             this->current_step = 0;
             this->ambient_light = Vector3f(0.1, 0.1, 0.1);
 

@@ -13,6 +13,7 @@
 
 using Eigen::Vector3f, Eigen::Vector3i;
 
+
 class Scene {
     protected:
         // animation variables
@@ -28,7 +29,6 @@ class Scene {
         virtual ~Scene() {}
         
         const float bounds = 6.0;
-        bool lighting = false;
 
         Texture background = Texture(222,222,222);
 

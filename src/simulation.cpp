@@ -86,6 +86,8 @@ Vector3i Simulation::raymarch(Vector3f& dir) {
         float nearest_dist = nearest->wdist(curr);
         if (nearest_dist < eps) {
 
+            Vector3i pixel_color = scene->shade(curr, normal, nearest->get_material());
+
             Vector3i pixel_color = nearest->get_texture().get_pixel_color();
 
             if (this->scene->lighting) {
@@ -93,7 +95,6 @@ Vector3i Simulation::raymarch(Vector3f& dir) {
                 Vector3f light_modifier = Vector3f(0.0,0.0,0.0);
 
                 for (std::shared_ptr<PointLight> light: scene->lights) {
-                    // TODO: figure out color theory
                     light_modifier += light_contribution(light, curr, nearest); 
                 }
 

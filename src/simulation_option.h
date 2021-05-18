@@ -19,7 +19,7 @@ struct SimulationOption {
         LIGHTING
     };
 
-    SceneType scene_type = MOVING_TORUS;
+    SceneType scene_type = LIGHTING;
 
     std::unique_ptr<Scene> get_scene() {
         switch(scene_type) {
