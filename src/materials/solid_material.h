@@ -17,9 +17,10 @@ class SolidMaterial: public Material {
             color = Vector3i(r,g,b);
         }
 
-        Vector3i shade(Vector3f location, Vector3f normal, std::vector<std::shared_ptr<PointLight>> lights) {
+        Vector3i shade(Vector3f location, Vector3f normal, Vector3f cam, std::vector<std::shared_ptr<PointLight>> lights) {
             (void) location;
             (void) normal;
+            (void) cam;
             (void) lights;
 
             return this->color;

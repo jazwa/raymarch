@@ -17,7 +17,12 @@ class Material {
         Vector3i color;
         float albedo = 0.18;
 
-        virtual Vector3i shade(Vector3f location, Vector3f normal, std::vector<std::shared_ptr<PointLight>> lights) = 0;
+        /* Can be seen as a very very very limited pixel shader
+           location: location in worldspace of pixel
+           normal  : normal of surface at location
+           cam     : camera location
+           lights  : lights which affect the surface location */
+        virtual Vector3i shade(Vector3f location, Vector3f normal, Vector3f cam, std::vector<std::shared_ptr<PointLight>> lights) = 0;
 
         Material(int r, int g, int b) {
             color = Vector3i(r,g,b);
