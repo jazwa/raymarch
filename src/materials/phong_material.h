@@ -7,12 +7,21 @@
 using std::vector;
 
 #include <Eigen/Core>
+#include "material.h"
 
-using Eigen::Vector3i;
+using Eigen::Vector3i, Eigen::Vector3f;
 
-class PhongMaterial {
+class PhongMaterial: public Material {
     public:
-        Vector3i shade(Vector3f location, Vector3f normal, vector<PointLight> lights) {
+        PhongMaterial(int r, int g, int b) {
+            color = Vector3i(r,g,b);
+        }
+
+        Vector3i shade(Vector3f location, Vector3f normal, std::vector<std::shared_ptr<PointLight>> lights) {
+            (void) location;
+            (void) normal;
+            (void) lights;
+
             return this->color;
         }
 

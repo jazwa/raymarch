@@ -7,6 +7,7 @@
 
 #include "shape.h"
 #include "light.h"
+#include "materials/solid_material.h"
 #include <vector>
 #include <memory>
 #include <Eigen/Core>
@@ -30,7 +31,7 @@ class Scene {
         
         const float bounds = 6.0;
 
-        Texture background = Texture(222,222,222);
+        std::shared_ptr<SolidMaterial> background = std::make_shared<SolidMaterial>(222,222,222);
 
         // TODO: declare superclass for different light and objectify them
         std::vector<std::shared_ptr<PointLight>> lights;

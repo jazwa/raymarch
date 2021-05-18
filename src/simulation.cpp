@@ -73,45 +73,27 @@ Vector3i Simulation::raymarch(Vector3f& dir) {
             abs(curr[1]) >= scene->bounds || 
             abs(curr[2]) >= scene->bounds) 
         {
-            return scene->background.get_pixel_color();
+            return scene->background->get_color();
         }
 
         auto nearest = scene->nearest_shape(curr);
 
         if (nearest == nullptr) {
             /* TODO handle this */
-            return scene->background.get_pixel_color();
+            return scene->background->get_color();
         }
 
         float nearest_dist = nearest->wdist(curr);
+
         if (nearest_dist < eps) {
-
-            Vector3i pixel_color = scene->shade(curr, normal, nearest->get_material());
-
-            Vector3i pixel_color = nearest->get_texture().get_pixel_color();
-
-            if (this->scene->lighting) {
-                // calculate the light contributions 
-                Vector3f light_modifier = Vector3f(0.0,0.0,0.0);
-
-                for (std::shared_ptr<PointLight> light: scene->lights) {
-                    light_modifier += light_contribution(light, curr, nearest); 
-                }
-
-                light_modifier = vclamp(light_modifier + scene->ambient_light, 1.0, 0.0);
-                //std::cout << light_modifier << std::endl;
-
-                return calc_color(pixel_color, light_modifier); 
-            } else {
-                // no lighting, return pixel color as is
-                return pixel_color;
-            }
+            Vector3f normal = nearest->wnormal(curr);
+            return nearest->material->shade(curr, normal, scene->lights);
         }
 
         /* move the ray forward by the length of the nearest shape */
         curr = curr + nearest_dist*dir;
     }
-    return this->scene->background.get_pixel_color();
+    return this->scene->background->get_color();
 }
 
 

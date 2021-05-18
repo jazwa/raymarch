@@ -3,21 +3,21 @@
 
 #include <Eigen/Dense>
 #include <algorithm>
-#include <texture.h>
+#include <materials/material.h>
 #include <object3d.h>
+#include <memory>
 #include <cmath>
 
 using namespace Eigen;
 
 class Shape : public Object3D {
     protected:
-        Texture texture;
         virtual float object_sdf(Vector3f p) = 0;
         // can either be analytical or approximate, prefer analytical
         virtual Vector3f object_normal(Vector3f p) = 0;
 
     public:
-
+        std::shared_ptr<Material> material;
         // worldspace functions get the distance field and surface normals
         float wdist(Vector3f p) {
             return this->object_sdf(this->inv_affine(p));
@@ -27,10 +27,6 @@ class Shape : public Object3D {
         }
 
         virtual ~Shape() {}
-        
-        Texture get_texture() {
-            return texture;
-        };
 };
 
 class Sphere: public Shape {
@@ -47,14 +43,14 @@ class Sphere: public Shape {
 
     public:
         // initialize the sphere with center at worldspace origin
-        Sphere(float radius, Texture texture) {
+        Sphere(float radius, std::shared_ptr<Material> material) {
             this->radius = radius;
-            this->texture = texture;
+            this->material = material;
         }
 
-        Sphere(Vector3f center, float radius, Texture texture) {
+        Sphere(Vector3f center, float radius, std::shared_ptr<Material> material) {
             this->radius = radius;
-            this->texture = texture;
+            this->material = material;
             this->apply_translate(center);
         }
 
@@ -74,10 +70,10 @@ class Plane: public Shape {
 
     public:
         // initialize plane on x-z axis
-        Plane(Texture texture) {
-            this->texture = texture;
+        Plane(std::shared_ptr<Material> material) {
+            this->material = material;
         }
-        Plane(Vector3f point, Vector3f normal, Texture texture) {
+        Plane(Vector3f point, Vector3f normal, std::shared_ptr<Material> material) {
 
             this->apply_translate(point);
             // TODO check correctness
@@ -86,16 +82,16 @@ class Plane: public Shape {
             this->apply_rotate_x(rx);
             this->apply_rotate_z(rz);
 
-            this->texture = texture;
+            this->material = material;
         }
 
-        Plane(Vector3f rotation, Texture texture) {
-            this->texture = texture;
+        Plane(Vector3f rotation, std::shared_ptr<Material> material) {
+            this->material = material;
             this->apply_rotate(rotation(0), 0 , rotation(2));
         }
 
-        Plane(float rx, float rz, Texture texture) {
-            this->texture = texture;
+        Plane(float rx, float rz, std::shared_ptr<Material> material) {
+            this->material = material;
             this->apply_rotate(rx, 0, rz);
         }
 
@@ -118,10 +114,10 @@ class Torus: public Shape {
         }
 
     public:
-        Torus(float r_dist, float radius, Texture texture) {
+        Torus(float r_dist, float radius, std::shared_ptr<Material> material) {
             this->r_dist = r_dist;
             this->radius = radius;
-            this->texture = texture;
+            this->material = material;
         }
 };
 
@@ -139,16 +135,16 @@ class Capsule: public Shape {
         }
         
         Vector3f object_normal(Vector3f p) {
-            (void)p;
-            assert(false); // TODO
+            // TODO: INCORRECT!
+            return p.normalized();
         }
 
     public:
-        Capsule(Vector3f a, Vector3f b, float radius, Texture texture) {
+        Capsule(Vector3f a, Vector3f b, float radius, std::shared_ptr<Material> material) {
             this->a = a;
             this->b = b;
             this->radius = radius;
-            this->texture = texture;
+            this->material = material;
         }
 };
 

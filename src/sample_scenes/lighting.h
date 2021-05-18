@@ -1,6 +1,6 @@
 #ifndef LIGHT_SCENE_H
 #define LIGHT_SCENE_H
-
+/* 
 #include "scene.h"
 #include "shape.h"
 #include <Eigen/Core>
@@ -35,8 +35,6 @@ class LightingScene : public Scene {
             this->scene_time_steps = 4;
             this->current_step = 0;
             this->ambient_light = Vector3f(0.1, 0.1, 0.1);
-
-            this->lighting = true;
 
             Vector3f sphere_start = Vector3f(-1.5, 1.0, 2.2);
             Vector3f sphere_mid = Vector3f(-1.5, -1.0, 2.2);
@@ -97,5 +95,5 @@ class LightingScene : public Scene {
             current_step++;
         }
 };
-
+ */
 #endif

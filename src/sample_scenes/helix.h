@@ -8,7 +8,7 @@
 
 using std::make_shared;
 
-class DNA_helix_scene : public Scene {
+class DNAHelixScene : public Scene {
     private:
         std::string dna_seq = "ggggaacccgcatgaaggtccgagtgagggcatgaacaagtcctactccacggtacggacattggctctgaacgcggaggtcatgtgttgttatgggggc";
         std::map<char, char> comp_base = {
@@ -17,23 +17,23 @@ class DNA_helix_scene : public Scene {
             {'c', 'g'},
             {'g', 'c'}
         };
-        std::map<char, Texture> base_color = {
-            {'a', Texture(0, 127, 255)}, // adenine -> azure
-            {'t', Texture(253, 245, 1)}, // thymine -> tweety bird
-            {'c', Texture(20, 253, 20)}, // guanine -> green
-            {'g', Texture(150, 10, 24)}  // cytosine -> carmine
+        std::map<char, std::shared_ptr<SolidMaterial> > base_color = {
+            {'a', make_shared<SolidMaterial>(0, 127, 255)}, // adenine -> azure
+            {'t', make_shared<SolidMaterial>(253, 245, 1)}, // thymine -> tweety bird
+            {'c', make_shared<SolidMaterial>(20, 253, 20)}, // guanine -> green
+            {'g', make_shared<SolidMaterial>(150, 10, 24)}  // cytosine -> carmine
         };
         // this might not be the right name
-        Texture pentose_color = Texture(170, 120, 230);
+        std::shared_ptr<SolidMaterial> pentose_color = make_shared<SolidMaterial>(170, 120, 230);
 
     public:
     
-        DNA_helix_scene() {
+        DNAHelixScene() {
             this->curr_t = 0.0;
             this->dt = 0.0;
             this->scene_time_steps = 1;
 
-            for (int y_idx = 0; y_idx <= 50; y_idx++) {     
+            for (int y_idx = 0; y_idx <= 50; y_idx++) {
                 float y = -2.5 + 0.1*((float)y_idx);
                 float cir_rad = 0.115;
                 float snd_point_bias = 0.62;

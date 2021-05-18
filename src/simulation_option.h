@@ -19,13 +19,13 @@ struct SimulationOption {
         LIGHTING
     };
 
-    SceneType scene_type = LIGHTING;
+    SceneType scene_type = DNA_HELIX;
 
     std::unique_ptr<Scene> get_scene() {
         switch(scene_type) {
-            case MOVING_TORUS : return std::make_unique<Moving_torus_scene>();
-            case DNA_HELIX    : return std::make_unique<DNA_helix_scene>();
-            case LIGHTING     : return std::make_unique<LightingScene>();
+            //case MOVING_TORUS : return std::make_unique<MovingTorusScene>();
+            case DNA_HELIX    : return std::make_unique<DNAHelixScene>();
+            //case LIGHTING     : return std::make_unique<LightingScene>();
             
             default : return nullptr;
         }

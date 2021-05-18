@@ -1,6 +1,6 @@
 #ifndef MOVING_TORUS_SCENE_H
 #define MOVING_TORUS_SCENE_H
-
+/* 
 #include "scene.h"
 #include "shape.h"
 #include <Eigen/Core>
@@ -8,7 +8,7 @@
 using Eigen::Vector3f;
 using std::make_shared;
 
-class Moving_torus_scene : public Scene {
+class MovingTorusScene : public Scene {
     private:        
         std::shared_ptr<Torus> tor;
         Vector3f start;
@@ -41,5 +41,5 @@ class Moving_torus_scene : public Scene {
             this->curr_t += this->dt;
         }
 };
-
+ */
 #endif

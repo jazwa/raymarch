@@ -3,6 +3,8 @@
 
 #include <Eigen/Core>
 
+using Eigen::Vector3i, Eigen::Vector3f;
+
 class PointLight {
 
     public:

@@ -16,7 +16,6 @@ using Eigen::Matrix4f, Eigen::Vector3f, Eigen::Matrix3f;
 
 class Object3D {
    private:
-      // TODO: implement quaternions
       Matrix4f current_transform;
       Matrix4f current_inverse;
 
