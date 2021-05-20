@@ -3,6 +3,7 @@
 
 #include "scene.h"
 #include "shape.h"
+#include "light.h"
 #include <iostream>
 #include <map>
 #include "materials/phong_material.h"
@@ -18,7 +19,7 @@ class MaterialTestScene : public Scene {
 
         std::shared_ptr<SolidMaterial> solidMat = make_shared<SolidMaterial>(170, 120, 230);
         //std::shared_ptr<CelMaterial> celMat = make_shared<CelMaterial>(170, 120, 230);
-        std::shared_ptr<PhongMaterial> phongMat = make_shared<PhongMaterial>();
+        std::shared_ptr<PhongMaterial> phongMat = make_shared<PhongMaterial>(Vector3f(0.6, 0.6, 0.1));
 
 
     public:
@@ -28,9 +29,10 @@ class MaterialTestScene : public Scene {
             this->curr_t = 0.0;
             this->dt = 0.0;
             this->scene_time_steps = 1;
+            this->background = make_shared<SolidMaterial>(222,222,222);
 
-            this->add_shape(make_shared<Sphere>(Vector3f(-0.3, 0.0, 1.0), 0.2, solidMat));
-
+            add_shape(make_shared<Sphere>(Vector3f(-0.3, 0.0, 1.0), 0.2, phongMat));
+            add_light(make_shared<PointLight>(Vector3f(0.0,0.2, 0.5), 10.0, Vector3f(255,255,255)));
         }
 
         void step_time() {}

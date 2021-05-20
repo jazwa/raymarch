@@ -1,8 +1,8 @@
 #include <iostream>
 #include <Eigen/Dense>
-#include <simulation.h>
 #include <fstream>
 #include <chrono>
+#include "simulation.h"
 #include "lodepng.h"
 
 using namespace Eigen;

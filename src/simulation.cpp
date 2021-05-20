@@ -87,7 +87,7 @@ Vector3i Simulation::raymarch(Vector3f& dir) {
 
         if (nearest_dist < eps) {
             Vector3f normal = nearest->wnormal(curr);
-            return nearest->material->shade(curr, normal, scene->cam.location, scene->lights);
+            return nearest->material->shade(curr, normal, *scene); // TODO: clean up pointers
         }
 
         /* move the ray forward by the length of the nearest shape */

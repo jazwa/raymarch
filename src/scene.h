@@ -4,17 +4,15 @@
 /*  Stores shapes in a 3d scene and provides (soon-to-be efficient) 
     accessors to various objects
 */
-
-#include "shape.h"
-#include "light.h"
-#include <camera.h>
-#include "materials/solid_material.h"
 #include <vector>
 #include <memory>
 #include <Eigen/Core>
+#include "shape.h"
+#include "light.h"
+#include "camera.h"
+#include "materials/solid_material.h"
 
 using Eigen::Vector3f, Eigen::Vector3i;
-
 
 class Scene {
     protected:
@@ -39,7 +37,7 @@ class Scene {
 
         std::shared_ptr<SolidMaterial> background = std::make_shared<SolidMaterial>(222,222,222);
 
-        Vector3f ambient_light = Vector3f(0.05, 0.05, 0.05);
+        Vector3f ambient_light = Vector3f(100, 100, 100);
         
         std::shared_ptr<Shape> nearest_shape(Vector3f p) {
             std::shared_ptr<Shape> ret = nullptr;
