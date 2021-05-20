@@ -6,23 +6,31 @@
 
 using Eigen::Vector3i, Eigen::Vector3f;
 
-class PointLight {
+
+class Light {
+    public:
+        virtual Vector3f intensity(Vector3f p) = 0;
+        virtual ~Light() {}
+};
+
+/* TODO: directional light - this might require a bit of refactoring */
+
+class PointLight : public Light {
 
     public:
         Vector3f tint;
-        float luminosity;
+        float s;
         Vector3f position;
     
-        PointLight(Vector3f position, float luminosity, Vector3f tint) {
+        PointLight(Vector3f position, float s, Vector3f tint) {
             this->position = position;
-            this->luminosity = luminosity;
+            this->s = s;
             this->tint = tint;
         }
 
-
         Vector3f intensity(Vector3f p) {
             float d2 = (this->position - p).squaredNorm();
-            return (this->luminosity * this->tint) / (4 * M_PI * d2);
+            return (this->s * this->tint) / (4 * M_PI * d2);
 
         }
 };

@@ -51,7 +51,7 @@ Vector3f Simulation::light_contribution(std::shared_ptr<PointLight> light, Vecto
             // really hardcore smoothing
             if ((curr - surface_point).norm() < 16.0*eps) {
                 Vector3f n = shape->wnormal(surface_point);
-                return Vector3f(1.0, 1.0, 1.0) * ((abs(dir.dot(n)) * light->luminosity)/(4.0*M_PI*distance));
+                return Vector3f(1.0, 1.0, 1.0) * ((abs(dir.dot(n)) * light->s)/(4.0*M_PI*distance));
             } else {
                 //std::cout << " interference " << std::endl;
                 return Vector3f(0.0,0.0,0.0);
