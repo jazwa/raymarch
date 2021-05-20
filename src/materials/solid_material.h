@@ -23,8 +23,6 @@ class SolidMaterial: public Material {
             (void) location;
             (void) normal;
             (void) scene;
-            
-
             return this->color;
         }
 

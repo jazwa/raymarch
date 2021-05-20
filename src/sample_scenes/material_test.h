@@ -13,14 +13,12 @@ using std::make_shared;
 
 class MaterialTestScene : public Scene {
     private:
-        const int width = 480;
-        const int height = 360;
+        const int width = 1280;
+        const int height = 720;
         const float fov = 90.0;
 
         std::shared_ptr<SolidMaterial> solidMat = make_shared<SolidMaterial>(170, 120, 230);
-        //std::shared_ptr<CelMaterial> celMat = make_shared<CelMaterial>(170, 120, 230);
-        std::shared_ptr<PhongMaterial> phongMat = make_shared<PhongMaterial>(Vector3f(0.6, 0.6, 0.1));
-
+        std::shared_ptr<PhongMaterial> phongMat = make_shared<PhongMaterial>(Vector3f(0.8, 0.6, 0.1), 1.0, 0.8, 0.2, 12.0);
 
     public:
     
@@ -32,7 +30,13 @@ class MaterialTestScene : public Scene {
             this->background = make_shared<SolidMaterial>(222,222,222);
 
             add_shape(make_shared<Sphere>(Vector3f(-0.3, 0.0, 1.0), 0.2, phongMat));
-            add_light(make_shared<PointLight>(Vector3f(0.0,0.2, 0.5), 10.0, Vector3f(255,255,255)));
+            
+            auto torus = make_shared<Torus>(0.2, 0.1, phongMat);
+            torus->apply_translate(Vector3f(0.3, 0.0, 1.0));
+            torus->apply_rotate(M_PI/3.0,0,0);
+            add_shape(torus);
+
+            add_light(make_shared<PointLight>(Vector3f(0.0,0.2, 0.5), 3.0, Vector3f(255,255,255)));
         }
 
         void step_time() {}

@@ -13,10 +13,10 @@ using Eigen::Vector3i, Eigen::Vector3f;
 
 class PhongMaterial: public Material {
     private:
-        float Ka = 2.0; // ambient reflect coeff
+        float Ka = 1.0; // ambient reflect coeff
         float Kd = 0.8; // diffuse reflect coeff
-        float Ks = 0.5; // specular reflect coeff
-        float alpha = 10.0; // shininess
+        float Ks = 0.2; // specular reflect coeff
+        float alpha = 12.0; // shininess
         Vector3f albedo;
 
     public:
@@ -24,6 +24,14 @@ class PhongMaterial: public Material {
 
         PhongMaterial(Vector3f albedo) {
             this->albedo = albedo;
+        }
+
+        PhongMaterial(Vector3f albedo, float Ka, float Kd, float Ks, float alpha) {
+            this->albedo = albedo;
+            this->Ka = Ka;
+            this->Kd = Kd;
+            this->Ks = Ks;
+            this->alpha = alpha;
         }
 
         Vector3i shade(Vector3f location, Vector3f normal, const Scene& scene) {
@@ -51,6 +59,7 @@ class PhongMaterial: public Material {
                 rgb += Ks*(std::pow(specAngle, alpha))*intensity;
             }
 
+            // TODO: figure a nicer way to clamp these values
             return Vector3i(fmin(254.0, rgb(0)), fmin(254.0,rgb(1)), fmin(254.0, rgb(2)));
         }
 };
