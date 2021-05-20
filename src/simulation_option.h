@@ -9,9 +9,7 @@
 
 
 struct SimulationOption {
-    const int width = 480;
-    const int height = 360;
-    const float fov = 90.0;
+
     const int num_threads = 32;
 
     enum SceneType {

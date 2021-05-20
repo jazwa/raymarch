@@ -13,27 +13,30 @@ using Eigen::Vector3i, Eigen::Vector3f;
 
 class PhongMaterial: public Material {
     private:
-        float Ka = 0.0; // ambient reflect coeff
-        float Kd = 0.0; // diffuse reflect coeff
-        float Ks = 0.0; // specular reflect coeff
-
+        //float Ka = 0.0; // ambient reflect coeff
+        //float Kd = 0.0; // diffuse reflect coeff
+        //float Ks = 0.0; // specular reflect coeff
 
 
     public:
-        PhongMaterial(int r, int g, int b) {
-            color = Vector3i(r,g,b);
-        }
+        PhongMaterial() {}
+
+        //PhongMaterial(Vector3i albe
 
         Vector3i shade(Vector3f location, Vector3f normal, Vector3f cam, std::vector<std::shared_ptr<PointLight>> lights) {
+            (void) cam;
             Vector3f N = normal.normalized();
             Vector3f L, R;
+            //float lambertian;
 
             for (auto& light: lights) {
                 L = (light->position - location).normalized();
                 R = 2.0 * (L.dot(N))*N - L; // reflect L on plane defined by N
-                
+                //lambertian = 
             }
 
+            return Vector3i(0,0,0);
+        }
 };
 
 #endif

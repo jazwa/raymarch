@@ -13,21 +13,19 @@ using Eigen::Vector3i, Eigen::Vector3f;
 
 class SolidMaterial: public Material {
     public:
+        Vector3i color;
+
         SolidMaterial(int r, int g, int b) {
-            color = Vector3i(r,g,b);
+            this->color = Vector3i(r,g,b);
         }
 
-        Vector3i shade(Vector3f location, Vector3f normal, Vector3f cam, std::vector<std::shared_ptr<PointLight>> lights) {
+        Vector3i shade(Vector3f location, Vector3f normal, Vector3f cam, std::vector<std::shared_ptr<PointLight>> lights ) {
             (void) location;
             (void) normal;
             (void) cam;
             (void) lights;
 
             return this->color;
-        }
-
-        Vector3i get_color() {
-            return color;
         }
 
 };

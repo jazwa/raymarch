@@ -3,6 +3,7 @@
 
 #include "scene.h"
 #include "shape.h"
+#include <camera.h>
 #include <iostream>
 #include <map>
 
@@ -10,6 +11,11 @@ using std::make_shared;
 
 class DNAHelixScene : public Scene {
     private:
+
+        const int width = 480;
+        const int height = 360;
+        const float fov = 90.0;
+
         std::string dna_seq = "ggggaacccgcatgaaggtccgagtgagggcatgaacaagtcctactccacggtacggacattggctctgaacgcggaggtcatgtgttgttatgggggc";
         std::map<char, char> comp_base = {
             {'a', 't'},
@@ -29,9 +35,12 @@ class DNAHelixScene : public Scene {
     public:
     
         DNAHelixScene() {
+
             this->curr_t = 0.0;
             this->dt = 0.0;
             this->scene_time_steps = 1;
+
+            this->cam = Camera(Vector3f(0,0,0), this->width, this->height, this->fov);
 
             for (int y_idx = 0; y_idx <= 50; y_idx++) {
                 float y = -2.5 + 0.1*((float)y_idx);

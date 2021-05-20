@@ -9,7 +9,6 @@
 #include <sample_scenes/helix.h>
 #include <sample_scenes/moving-torus.h>
 #include <sample_scenes/lighting.h>
-#include <camera.h>
 #include <scene.h>
 #include <light.h>
 #include <thread>
@@ -17,13 +16,12 @@
 #include <cmath>
 
 using namespace Eigen;
+
 class Simulation {
 
     private:
         // Holds pixel colors of current image after render step
         int *frame_buffer;
-        // Camera to shoot rays from
-        Camera cam;
 
         // Worker pool, default initialized
         std::vector<std::thread> workers;
@@ -39,13 +37,14 @@ class Simulation {
 
 
         Simulation() {
-            /* cache align to hopefully reduce false sharing */
-            /* TODO find a better way to represent this */
-            frame_buffer = static_cast<int*>(aligned_alloc(64, sizeof(int)*3*options.width*options.height));
-            cam = Camera(Vector3f(0,0,0), options.width, options.height, options.fov);
-            
+
             // choose scene to create
             scene = options.get_scene();
+
+            /* cache align to hopefully reduce false sharing */
+            /* TODO find a better way to represent this */
+            frame_buffer = static_cast<int*>(aligned_alloc(64, sizeof(int)*3*scene->cam.frame_width*scene->cam.frame_height));
+
 
         }
 

@@ -65,7 +65,7 @@ Vector3f Simulation::light_contribution(std::shared_ptr<PointLight> light, Vecto
 
 Vector3i Simulation::raymarch(Vector3f& dir) {
     const int max_steps = 256;
-    Vector3f curr = cam.origin();
+    Vector3f curr = scene->cam.location;
 
     for (int step = 0; step < max_steps; step++) {
         
@@ -73,41 +73,44 @@ Vector3i Simulation::raymarch(Vector3f& dir) {
             abs(curr[1]) >= scene->bounds || 
             abs(curr[2]) >= scene->bounds) 
         {
-            return scene->background->get_color();
+            return scene->background->color;
         }
 
         auto nearest = scene->nearest_shape(curr);
 
         if (nearest == nullptr) {
             /* TODO handle this */
-            return scene->background->get_color();
+            return scene->background->color;
         }
 
         float nearest_dist = nearest->wdist(curr);
 
         if (nearest_dist < eps) {
             Vector3f normal = nearest->wnormal(curr);
-            return nearest->material->shade(curr, normal, scene->lights);
+            return nearest->material->shade(curr, normal, scene->cam.location, scene->lights);
         }
 
         /* move the ray forward by the length of the nearest shape */
         curr = curr + nearest_dist*dir;
     }
-    return this->scene->background->get_color();
+    return this->scene->background->color;
 }
 
 
 void Simulation::raymarch_worker_thread(int i, int work) {
 
-    for (int idx = i; idx < i+work && idx < options.height*options.width; idx++) {
-        int yidx = idx / options.width;
-        int xidx = idx % options.width;
+    const int height = scene->cam.frame_height;
+    const int width = scene->cam.frame_width;
 
-        Vector3f dir = cam.pixel_ray(xidx, yidx);
+    for (int idx = i; idx < i+work && idx < height*width; idx++) {
+        int yidx = idx / width;
+        int xidx = idx % width;
+
+        Vector3f dir = scene->cam.pixel_ray(xidx, yidx);
         Vector3i pixel_color = raymarch(dir);
 
         /* write to the frame buffer */
-        int fb_idx = 3*(yidx*options.width + xidx);
+        int fb_idx = 3*(yidx*width + xidx);
         frame_buffer[fb_idx] = pixel_color[0];
         frame_buffer[fb_idx+1] = pixel_color[1];
         frame_buffer[fb_idx+2] = pixel_color[2];
@@ -116,7 +119,10 @@ void Simulation::raymarch_worker_thread(int i, int work) {
 
 void Simulation::render_step() {
 
-    int work_per_thread = ceil((options.height*options.width) / options.num_threads);
+    const int height = scene->cam.frame_height;
+    const int width = scene->cam.frame_width;
+
+    int work_per_thread = ceil((height*width) / options.num_threads);
     /* Nearest upper multiple of cache line size */
     work_per_thread = ((work_per_thread-1)/64) * 64 + 64;
 

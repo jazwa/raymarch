@@ -7,6 +7,7 @@
 
 #include "shape.h"
 #include "light.h"
+#include <camera.h>
 #include "materials/solid_material.h"
 #include <vector>
 #include <memory>
@@ -21,20 +22,22 @@ class Scene {
         unsigned int scene_time_steps;
         float dt;
         float curr_t;
-  
-        // internal representation of group of objects, jumping point to 
-        // implement spatial binning
-        std::vector<std::shared_ptr<Shape>> scene_shapes;
 
     public:
         virtual ~Scene() {}
+
+        // Camera to shoot rays from
+        Camera cam;
+
+        // TODO: implement spatial binning
+        std::vector<std::shared_ptr<Shape>> scene_shapes;
+
+        // TODO: declare superclass for different light and objectify them
+        std::vector<std::shared_ptr<PointLight>> lights;
         
         const float bounds = 6.0;
 
         std::shared_ptr<SolidMaterial> background = std::make_shared<SolidMaterial>(222,222,222);
-
-        // TODO: declare superclass for different light and objectify them
-        std::vector<std::shared_ptr<PointLight>> lights;
 
         Vector3f ambient_light = Vector3f(0.05, 0.05, 0.05);
         
@@ -52,7 +55,6 @@ class Scene {
 
             return ret;
         }
-
 
         void add_shape(std::shared_ptr<Shape> shape) {
             this->scene_shapes.push_back(shape);

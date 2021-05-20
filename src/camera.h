@@ -9,15 +9,21 @@
 /* TODO: support arbitrary camera transforms */
 
 class Camera {
-    private:
+
+    public:
         Vector3f location;
         float frame_width;
         float frame_height;
         float aspect_ratio;
         float fov; // radians
 
-    public:
-        Camera(){}
+        Camera(){
+            this->location = Vector3f(0,0,0);
+            this->frame_width = 480.0;
+            this->frame_height = 360.0;
+            this->aspect_ratio = frame_width / frame_height;
+            this->fov = M_PI / 2.0;
+        }
 
         Camera(Vector3f location, int width, int height, float fov){
             this->location = location;
@@ -38,11 +44,6 @@ class Camera {
             /* camera space to world space TODO: support transforms */
             return Vector3f(cs_x, cs_y, 1.0).normalized();
         }
-
-        Vector3f origin() {
-            return this->location;
-        }
-
 };
 
 #endif
