@@ -4,8 +4,6 @@
 /* Basic Phong shading
 */
 
-using std::vector;
-
 #include <Eigen/Core>
 #include "material.h"
 

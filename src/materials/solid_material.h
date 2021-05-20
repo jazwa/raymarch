@@ -3,9 +3,6 @@
 
 /* No shading, just a color
 */
-
-using std::vector;
-
 #include <Eigen/Core>
 #include "material.h"
 

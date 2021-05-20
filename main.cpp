@@ -1,11 +1,8 @@
 #include <iostream>
-#include <Eigen/Dense>
 #include <fstream>
 #include <chrono>
 #include "simulation.h"
 #include "lodepng.h"
-
-using namespace Eigen;
 
 using std::cout, std::endl, std::ofstream, std::ios_base, std::string;
 using std::chrono::duration_cast;
