@@ -4,7 +4,6 @@
 #include <Eigen/Dense>
 #include <vector>
 #include <map>
-#include <texture.h>
 #include <shape.h>
 #include <sample_scenes/helix.h>
 #include <sample_scenes/moving-torus.h>
