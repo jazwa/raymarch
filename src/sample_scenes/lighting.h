@@ -17,9 +17,9 @@ class LightingScene : public Scene {
         const float fov = 90.0;
 
         shared_ptr<Sphere> sphere;
-        shared_ptr<PhongMaterial> sphere_mat = make_shared<PhongMaterial>(Vector3f(0.8, 0.6, 0.1), 1.0, 2.0, 0.4, 16.0);
+        shared_ptr<PhongMaterial> sphere_mat = make_shared<PhongMaterial>(Vector3f(0.8, 0.6, 0.1), 1.0, 2.0, 0.6, 20.0);
         shared_ptr<Torus> torus;
-        shared_ptr<PhongMaterial> torus_mat = make_shared<PhongMaterial>(Vector3f(0.3, 0.6, 0.8), 1.0, 1.0, 0.2, 16.0);
+        shared_ptr<PhongMaterial> torus_mat = make_shared<PhongMaterial>(Vector3f(0.3, 0.6, 0.8), 1.0, 1.2, 0.4, 20.0);
         
         int current_step;
 
