@@ -17,52 +17,6 @@ Vector3i calc_color(Vector3i p, Vector3f m) {
     return Vector3i((int) (p(0)*m(0)), (int) (p(1)*m(1)), (int) (p(2)*m(2)));
 }
 
-
-Vector3f Simulation::light_contribution(std::shared_ptr<PointLight> light, Vector3f surface_point, std::shared_ptr<Shape> shape) {
-    
-    (void) surface_point;
-    (void) shape;
-
-    Vector3f curr = light->position;
-    Vector3f dir = (surface_point - light->position).normalized();
-    const float distance = (surface_point - light->position).norm();
-    const int max_steps = 256;
-    float t = 0.0;
-
-    // march in the direction of the surface point
-    for (int step = 0; step < max_steps; step++) {
-
-        if (abs(curr[0]) >= scene->bounds || 
-            abs(curr[1]) >= scene->bounds || 
-            abs(curr[2]) >= scene->bounds) 
-        {
-            return Vector3f(0.0,0.0,0.0);
-        }
-
-        // can be cleaned up
-        auto nearest = scene->nearest_shape(curr);
-        float nearest_dist = nearest->wdist(curr);
-        
-        // increment t
-        t += nearest_dist;
-        curr = light->position + t*dir;
-
-        if (nearest_dist < eps) {
-            // really hardcore smoothing
-            if ((curr - surface_point).norm() < 16.0*eps) {
-                Vector3f n = shape->wnormal(surface_point);
-                return Vector3f(1.0, 1.0, 1.0) * ((abs(dir.dot(n)) * light->s)/(4.0*M_PI*distance));
-            } else {
-                //std::cout << " interference " << std::endl;
-                return Vector3f(0.0,0.0,0.0);
-            }
-        }
-
-        
-    }
-    return Vector3f(0.0,0.0,0.0);
-}
-
 Vector3i Simulation::raymarch(Vector3f& dir) {
     const int max_steps = 256;
     Vector3f curr = scene->cam.location;

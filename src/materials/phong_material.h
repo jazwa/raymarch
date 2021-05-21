@@ -44,15 +44,15 @@ class PhongMaterial: public Material {
             for (auto& light: scene.lights) {
 
                 intensity = light->intensity(location);
-                V = scene.cam.location - location;
                 L = (light->position - location).normalized();
-                R = 2.0 * (L.dot(N))*N - L; // reflect L on plane defined by N
-                lambertian = fmax(L.dot(N), 0.0);
 
                 // compute diffuse
+                V = (scene.cam.location - location).normalized();
+                lambertian = fmax(L.dot(N), 0.0);
                 rgb += Kd*lambertian*(intensity.cwiseProduct(this->albedo));
 
                 // compute specular
+                R = 2.0 * (L.dot(N))*N - L; // reflect L on plane defined by N
                 specAngle = fmax(R.dot(V), 0.0);
                 rgb += Ks*(std::pow(specAngle, alpha))*intensity;
             }

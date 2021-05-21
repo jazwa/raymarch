@@ -19,13 +19,13 @@ struct SimulationOption {
         MATERIAL
     };
 
-    SceneType scene_type = MATERIAL;
+    SceneType scene_type = LIGHTING;
 
     std::unique_ptr<Scene> get_scene() {
         switch(scene_type) {
             //case MOVING_TORUS : return std::make_unique<MovingTorusScene>();
             //case DNA_HELIX    : return std::make_unique<DNAHelixScene>();
-            //case LIGHTING     : return std::make_unique<LightingScene>();
+            case LIGHTING       : return std::make_unique<LightingScene>();
             case MATERIAL       : return std::make_unique<MaterialTestScene>();
             
             default : return nullptr;
