@@ -54,9 +54,9 @@ class Sphere: public Shape {
             return p.norm() - radius;
         }
         
-        /* Vector3f object_normal(Vector3f p) {
+        Vector3f object_normal(Vector3f p) {
             return p.normalized(); // not needed
-        } */
+        }
 
     public:
         // initialize the sphere with center at worldspace origin
@@ -125,10 +125,10 @@ class Torus: public Shape {
             return p_to_slice_center.norm() - radius;
         }
 
-        /* Vector3f object_normal(Vector3f p) {
+        Vector3f object_normal(Vector3f p) {
             Vector3f slice_center = Vector3f(p(0), 0, p(2)).normalized() * r_dist;
             return (p-slice_center).normalized();
-        } */
+        }
 
     public:
         Torus(float r_dist, float radius, std::shared_ptr<Material> material) {

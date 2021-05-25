@@ -22,12 +22,11 @@ class LightingScene : public Scene {
         shared_ptr<PhongMaterial> torus_mat = make_shared<PhongMaterial>(Vector3f(0.3, 0.6, 0.8), 1.0, 0.5, 0.1, 20.0);
 
         shared_ptr<Box> box;
-        shared_ptr<PhongMaterial> box_mat = make_shared<PhongMaterial>(Vector3f(0.3, 0.6, 0.8), 1.0, 1.2, 0.4, 20.0);
-        //shared_ptr<SolidMaterial> box_mat = make_shared<SolidMaterial>(122, 100, 200);
-        
-        int current_step;
+        shared_ptr<PhongMaterial> box_mat = make_shared<PhongMaterial>(Vector3f(0.3, 0.7, 0.4), 1.5, 0.5, 0.01, 20.0);
 
+        int current_step;
         float torus_frame_rotate;
+        float box_frame_rotate;
         float sphere_frame_z_disp;
 
         shared_ptr <PointLight> light;
@@ -35,13 +34,14 @@ class LightingScene : public Scene {
     public:
         LightingScene() {
             this->cam = Camera(Vector3f(0,0,0), this->width, this->height, this->fov);
-            this->scene_time_steps = 1;
+            this->scene_time_steps = 32;
             this->current_step = 0;
 
             Vector3f sphere_start = Vector3f(-1.0, 0.0, 2.0);
             Vector3f sphere_mid = Vector3f(-1.0, 0.0, 1.5);
 
             torus_frame_rotate = (2.0*M_PI) / ((float) this->scene_time_steps);
+            box_frame_rotate = (2.0*M_PI)/ ((float) this->scene_time_steps);
             sphere_frame_z_disp = (2.0*(sphere_start(2)-sphere_mid(2))) / ((float) this->scene_time_steps);
 
             torus = make_shared<Torus>(0.3, 0.1, torus_mat);
@@ -51,8 +51,10 @@ class LightingScene : public Scene {
             sphere = make_shared<Sphere>(sphere_start, 0.4, sphere_mat);
             add_shape(sphere);
 
-            box = make_shared<Box>(Vector3f(0.2, 0.2, 0.2), box_mat);
-            box->apply_translate(Vector3f(0.3, 0.3, 1.2));
+            box = make_shared<Box>(Vector3f(0.15, 0.15, 0.15), box_mat);
+            box->apply_translate(Vector3f(0.3, 0.3, 1.0));
+            box->apply_rotate_z(M_PI/4.0);
+            box->apply_rotate_y(M_PI/4.0);
             add_shape(box);
 
             light = make_shared<PointLight>(Vector3f(0.0,0.2, 1.0), 1.0, Vector3f(255,255,255));
@@ -62,6 +64,7 @@ class LightingScene : public Scene {
 
         void step_time() {
             torus->apply_rotate_x(torus_frame_rotate);
+            box->apply_rotate_z(box_frame_rotate);
 
             Vector3f sphere_direction;
             if (current_step >= (int)(this->scene_time_steps/2)) {
