@@ -18,56 +18,19 @@ class Shape : public Object3D {
 
         // can either be analytical or approximate, prefer analytical
         virtual Vector3f object_normal(Vector3f p) {
-            
-            // sample sdf near p, construct a normal from the closest 2 points
-            // has to be an even number!
-            const int sbox = 16;
-            const int sbox2 = sbox*sbox;
-            const int sbox3 = sbox*sbox2;
+
             const float eps = 0.002;
             
-            const Vector3f corner_sample = p.array() - ((sbox/2)*eps);
+            const Vector3f dx = Vector3f(1,0,0)*eps;
+            const Vector3f dy = Vector3f(0,1,0)*eps;
+            const Vector3f dz = Vector3f(0,0,1)*eps;
+            float pdist = object_sdf(p);
+            Vector3f n = Vector3f(object_sdf(p+dx) - pdist,
+                                  object_sdf(p+dy) - pdist,
+                                  object_sdf(p+dz) - pdist);
+            n.normalize();
 
-            float fst_closest_dist = 1000.0;
-            float snd_closest_dist = 1000.0;
-            float sample_distances[sbox3];
-            int fst_closest_idx, snd_closest_idx;
-
-            auto indexVec = [eps,&corner_sample](int i) {
-                const int xi = i/sbox2;
-                const int yi = (i%sbox2)/sbox;
-                const int zi = i%sbox;
-                return Vector3f(corner_sample + Vector3f(xi, yi, zi)*eps);
-            };
-
-            // first pass to get the closest point to surface
-            for (int i = 0; i < sbox3; i++) {
-                sample_distances[i] = fabs(this->object_sdf(indexVec(i)));
-
-                if (sample_distances[i] < fst_closest_dist) {
-                    fst_closest_dist = sample_distances[i];
-                    fst_closest_idx = i;
-                }
-            }
-
-            // second pass to get the second closest point
-            for (int i = 0; i < sbox3; i++) {
-                if (sample_distances[i] < snd_closest_dist && i != fst_closest_idx) {
-                    snd_closest_dist = sample_distances[i];
-                    snd_closest_idx = i;
-                }
-            }
-
-            // get normal (might be negated)
-            Vector3f pf = indexVec(fst_closest_idx) - p;
-            Vector3f ps = indexVec(snd_closest_idx) - p;
-            Vector3f norm = pf.cross(ps).normalized();
-            // use sdf to determine orientation of normal
-            if (object_sdf(p+(norm*eps)) < object_sdf(p-(norm*eps))) {
-                return -norm;
-            } else {
-                return norm;
-            }
+            return n;
         };
 
     public:
