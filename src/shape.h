@@ -8,13 +8,67 @@
 #include <memory>
 #include <cmath>
 
+#include <iostream>
+
 using namespace Eigen;
 
 class Shape : public Object3D {
     protected:
         virtual float object_sdf(Vector3f p) = 0;
+
         // can either be analytical or approximate, prefer analytical
-        virtual Vector3f object_normal(Vector3f p) = 0;
+        virtual Vector3f object_normal(Vector3f p) {
+            
+            // sample sdf near p, construct a normal from the closest 2 points
+            // has to be an even number!
+            const int sbox = 16;
+            const int sbox2 = sbox*sbox;
+            const int sbox3 = sbox*sbox2;
+            const float eps = 0.002;
+            
+            const Vector3f corner_sample = p.array() - ((sbox/2)*eps);
+
+            float fst_closest_dist = 1000.0;
+            float snd_closest_dist = 1000.0;
+            float sample_distances[sbox3];
+            int fst_closest_idx, snd_closest_idx;
+
+            auto indexVec = [eps,&corner_sample](int i) {
+                const int xi = i/sbox2;
+                const int yi = (i%sbox2)/sbox;
+                const int zi = i%sbox;
+                return Vector3f(corner_sample + Vector3f(xi, yi, zi)*eps);
+            };
+
+            // first pass to get the closest point to surface
+            for (int i = 0; i < sbox3; i++) {
+                sample_distances[i] = fabs(this->object_sdf(indexVec(i)));
+
+                if (sample_distances[i] < fst_closest_dist) {
+                    fst_closest_dist = sample_distances[i];
+                    fst_closest_idx = i;
+                }
+            }
+
+            // second pass to get the second closest point
+            for (int i = 0; i < sbox3; i++) {
+                if (sample_distances[i] < snd_closest_dist && i != fst_closest_idx) {
+                    snd_closest_dist = sample_distances[i];
+                    snd_closest_idx = i;
+                }
+            }
+
+            // get normal (might be negated)
+            Vector3f pf = indexVec(fst_closest_idx) - p;
+            Vector3f ps = indexVec(snd_closest_idx) - p;
+            Vector3f norm = pf.cross(ps).normalized();
+            // use sdf to determine orientation of normal
+            if (object_sdf(p+(norm*eps)) < object_sdf(p-(norm*eps))) {
+                return -norm;
+            } else {
+                return norm;
+            }
+        };
 
     public:
         std::shared_ptr<Material> material;
@@ -37,9 +91,9 @@ class Sphere: public Shape {
             return p.norm() - radius;
         }
         
-        Vector3f object_normal(Vector3f p) {
+        /* Vector3f object_normal(Vector3f p) {
             return p.normalized(); // not needed
-        }
+        } */
 
     public:
         // initialize the sphere with center at worldspace origin
@@ -108,10 +162,10 @@ class Torus: public Shape {
             return p_to_slice_center.norm() - radius;
         }
 
-        Vector3f object_normal(Vector3f p) {
+        /* Vector3f object_normal(Vector3f p) {
             Vector3f slice_center = Vector3f(p(0), 0, p(2)).normalized() * r_dist;
             return (p-slice_center).normalized();
-        }
+        } */
 
     public:
         Torus(float r_dist, float radius, std::shared_ptr<Material> material) {
@@ -146,6 +200,23 @@ class Capsule: public Shape {
             this->radius = radius;
             this->material = material;
         }
+};
+
+class Box: public Shape {
+    private:
+        Vector3f dim;
+
+        float object_sdf(Vector3f p) {
+            Vector3f q = p.cwiseAbs() - dim;
+            return q.cwiseMax(0.0).squaredNorm() + fmin(fmax(q(0), fmax(q(1), q(2))), 0.0);
+        }
+
+    public:
+        Box(Vector3f dimensions, std::shared_ptr<Material> material) {
+            this->dim = dimensions;
+            this->material = material;
+        }
+
 };
 
 

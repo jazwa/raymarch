@@ -17,9 +17,13 @@ class LightingScene : public Scene {
         const float fov = 90.0;
 
         shared_ptr<Sphere> sphere;
-        shared_ptr<PhongMaterial> sphere_mat = make_shared<PhongMaterial>(Vector3f(0.8, 0.6, 0.1), 1.0, 2.0, 0.6, 20.0);
+        shared_ptr<PhongMaterial> sphere_mat = make_shared<PhongMaterial>(Vector3f(0.8, 0.6, 0.1), 1.0, 1.0, 0.3, 20.0);
         shared_ptr<Torus> torus;
-        shared_ptr<PhongMaterial> torus_mat = make_shared<PhongMaterial>(Vector3f(0.3, 0.6, 0.8), 1.0, 1.2, 0.4, 20.0);
+        shared_ptr<PhongMaterial> torus_mat = make_shared<PhongMaterial>(Vector3f(0.3, 0.6, 0.8), 1.0, 0.5, 0.1, 20.0);
+
+        shared_ptr<Box> box;
+        shared_ptr<PhongMaterial> box_mat = make_shared<PhongMaterial>(Vector3f(0.3, 0.6, 0.8), 1.0, 1.2, 0.4, 20.0);
+        //shared_ptr<SolidMaterial> box_mat = make_shared<SolidMaterial>(122, 100, 200);
         
         int current_step;
 
@@ -31,7 +35,7 @@ class LightingScene : public Scene {
     public:
         LightingScene() {
             this->cam = Camera(Vector3f(0,0,0), this->width, this->height, this->fov);
-            this->scene_time_steps = 32;
+            this->scene_time_steps = 1;
             this->current_step = 0;
 
             Vector3f sphere_start = Vector3f(-1.0, 0.0, 2.0);
@@ -47,7 +51,11 @@ class LightingScene : public Scene {
             sphere = make_shared<Sphere>(sphere_start, 0.4, sphere_mat);
             add_shape(sphere);
 
-            light = make_shared<PointLight>(Vector3f(0.0,0.2, 1.0), 3.0, Vector3f(255,255,255));
+            box = make_shared<Box>(Vector3f(0.2, 0.2, 0.2), box_mat);
+            box->apply_translate(Vector3f(0.3, 0.3, 1.2));
+            add_shape(box);
+
+            light = make_shared<PointLight>(Vector3f(0.0,0.2, 1.0), 1.0, Vector3f(255,255,255));
             add_light(light);
 
         }

@@ -34,7 +34,7 @@ class DNAHelixScene : public Scene {
         std::shared_ptr<SolidMaterial> pentose_color = make_shared<SolidMaterial>(170, 120, 230);
 
     public:
-    
+
         DNAHelixScene() {
 
             this->curr_t = 0.0;

@@ -30,7 +30,7 @@ class PointLight : public Light {
 
         Vector3f intensity(Vector3f p) {
             float d2 = (this->position - p).squaredNorm();
-            return (this->s * this->tint) / (4 * M_PI * d2);
+            return (this->s * this->tint) / d2;
 
         }
 };

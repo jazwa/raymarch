@@ -15,7 +15,7 @@ class Material {
         // Can be seen as a very very very limited pixel shader 
         virtual Vector3i shade(
             Vector3f location,
-            Vector3f normal , 
+            Vector3f normal,
             const Scene& scene
         ) = 0;
 
